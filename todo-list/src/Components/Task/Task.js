@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 const task = (props) => {
     return (
-        <div>
-            <p>{props.id}</p>
-            <p>{props.title}</p>
-            <p>{props.desc}</p>
-            <p>{props.status}</p>
-            <p>{props.label}</p>
-            <p>{props.date}</p>
-        </div>
+        <tr>
+            <th scope="row">{props.id}</th>
+            <td>{props.title}</td>
+            <td>{props.desc}</td>
+            <td>{props.status}</td>
+            <td>{props.label}</td>
+            <td>{props.date}</td>
+        </tr>
     )
 };
 
