@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Task from '../Task/Task';
+import AddTask from '../AddTask/AddTask';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Todo.css'
 
@@ -41,30 +42,33 @@ let todoItems = [
 class Todo extends Component {
   render() {
     return (
-      <table class="table table-borderless table-responsive todo-table">
-        <thead class="thead-light">
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Title</th>
-            <th scope="col">Description</th>
-            <th scope="col">Status</th>
-            <th scope="col">Label</th>
-            <th scope="col">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-        {todoItems.map(item => {
-          return <Task
-            id={item.id}
-            title={item.title}
-            desc={item.description}
-            status={item.status}
-            label={item.label}
-            date={item.date}
-          />
-        })}
-        </tbody>
-      </table>
+      <div>
+        <AddTask />
+        <table class="table table-borderless table-responsive todo-table table-responsive-stack">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Title</th>
+              <th scope="col">Description</th>
+              <th scope="col">Status</th>
+              <th scope="col">Label</th>
+              <th scope="col">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+          {todoItems.map(item => {
+            return <Task
+              id={item.id}
+              title={item.title}
+              desc={item.description}
+              status={item.status}
+              label={item.label}
+              date={item.date}
+            />
+          })}
+          </tbody>
+        </table>
+      </div>
     )
   }
 }
