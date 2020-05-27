@@ -2,23 +2,45 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import './Task.css';
 
-const task = (props) => {
-    return (
-        <tr>
-            <th scope="row">
-            <Form className="mb-3">
-                <Form.Group controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" />
-                </Form.Group>
-            </Form>
-            </th>
-            <td>{props.desc}</td>
-            <td>{props.status}</td>
-            <td>{props.label}</td>
-            <td>{props.date}</td>
-            <td>{props.time}</td>
-        </tr>
-    )
-};
+class Task extends React.Component {
 
-export default task;
+    constructor(props) {
+        super(props);
+        this.state = {
+            checkBoxChecked: false
+        }
+    }
+
+    handleCheckBox = (event) => {
+        this.setState(
+            {
+                checkBoxChecked: event.target.checked
+            }
+        );
+    }
+
+    render() {
+        return (
+            <tr>
+                <th className={!this.state.checkBoxChecked ? "" : "strikeThrough"} scope="row">
+                <Form className="mb-3">
+                    <Form.Group controlId="formBasicCheckbox">
+                        <Form.Check 
+                            type="checkbox" 
+                            checked={this.state.checkBoxChecked}
+                            onChange={this.handleCheckBox}
+                        />
+                    </Form.Group>
+                </Form>
+                </th>
+                <td className={!this.state.checkBoxChecked ? "" : "strikeThrough"}>{this.props.desc}</td>
+                <td className={!this.state.checkBoxChecked ? "" : "strikeThrough"}>{this.props.status}</td>
+                <td className={!this.state.checkBoxChecked ? "" : "strikeThrough"}>{this.props.label}</td>
+                <td className={!this.state.checkBoxChecked ? "" : "strikeThrough"}>{this.props.date}</td>
+                <td className={!this.state.checkBoxChecked ? "" : "strikeThrough"}>{this.props.time}</td>
+            </tr>
+        )
+    }
+}
+
+export default Task;

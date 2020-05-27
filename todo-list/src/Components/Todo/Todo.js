@@ -63,8 +63,6 @@ class Todo extends Component {
       show: this.state.show,
       todoItems: newitems
     });
-
-    console.log(this.state);
   }
 
   render() {
