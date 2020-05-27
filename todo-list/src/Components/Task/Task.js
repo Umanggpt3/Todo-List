@@ -4,7 +4,6 @@ const task = (props) => {
     return (
         <tr>
             <th scope="row">{props.id}</th>
-            <td>{props.title}</td>
             <td>{props.desc}</td>
             <td>{props.status}</td>
             <td>{props.label}</td>
