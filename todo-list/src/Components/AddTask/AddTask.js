@@ -1,76 +1,190 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './AddTask.css';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import InputGroup from 'react-bootstrap/InputGroup';
 
-const addtask = (props) => {
+class Addtask extends React.Component {
 
-    return (
-        <>
-            <Modal
-                {...props}
-                size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-            >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    <h2 class="py-1" style={{fontWeight: 600}}>Add Task</h2>
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <form class="needs-validation" noValidate>
-                    <div class="form-row">
-                        <div class="col-md-12 mb-3">
-                        <input type="text" class="form-control" id="validationCustom01" placeholder="Enter the Task" required />
-                        <div class="valid-feedback">
-                            Looks good!
-                        </div>
-                        </div>
-                    </div>
-                    <div className="form-row">
-                        <div class="col-md-4 mb-3">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroupPrepend">Date</span>
-                            </div>
-                            <input type="date" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required />
-                            <div class="invalid-feedback">
-                                Please choose a deadline.
-                            </div>
-                        </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroupPrepend">Time</span>
-                            </div>
-                            <input type="time" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required />
-                            <div class="invalid-feedback">
-                                Please choose a reminder time.
-                            </div>
-                        </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                        <input type="text" placeholder="Enter label" class="form-control" id="validationCustom05" required />
-                        <div class="invalid-feedback">
-                            Please provide a valid label.
-                        </div>
-                        </div>  
-                    </div>
-                    <div class="form-row">
-                        <div class="offset-md-3 col-md-2 mb-3">
-                            <button class="btn btn-outline-primary btn-lg" type="submit" id="add-btn">Add</button>
-                        </div>
-                        <div class="offset-md-2 col-md-2 mb-3">
-                            <button class="btn btn-outline-danger btn-lg" type="reset" id="reset-btn">Reset</button>
-                        </div>
-                    </div>
-                </form>
-            </Modal.Body>
-            </Modal>
-        </>
-    )
+    constructor(props) {
+        super(props);
+        this.state = {
+            validated: false,
+            item: {
+                id: "",
+                description: "",
+                status: "New",
+                label: "",
+                date: "",
+                time: ""
+            }
+        }
+    }
+
+    setValidated = (val) => {
+        this.setState({
+            validated: val
+        })
+    }
+
+    handleSubmit = (event) => {
+        const form = event.currentTarget;
+        event.preventDefault();
+        if (form.checkValidity() === false) {
+            event.stopPropagation();
+        } else {
+            this.props.addNewTask(this.state.item);
+        }
+        this.setValidated(true);
+    }
+
+    handleReset = (event) => {
+        let newitem = {
+            id: "",
+            description: "",
+            status: "New",
+            label: "",
+            date: "",
+            time: ""
+        }
+
+        this.setState({
+            item: newitem
+        })
+    }
+
+    handleInputChange = (event) => {
+        const target = event.target;
+        let value;
+        if(target.name === "description") {
+            value = target.value;
+        } else if(target.name === "date") {
+            value = target.value;
+        } else if(target.name === "time") {
+            value = target.value;
+        } else if(target.name === "label") {
+            value = target.value;
+        }
+
+        const name = target.name;
+    
+        this.state.item[name] = value;
+    
+        this.setState({
+            item: this.state.item
+        })
+    }
+
+    render() {
+
+        return (
+            <>
+                <Modal
+                    {...this.props}
+                    size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        <h2 class="py-1" style={{fontWeight: 600}}>Add Task</h2>
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form noValidate validated={this.state.validated} onSubmit={this.handleSubmit} onReset={this.handleReset}>
+                        <Form.Row>
+                            <Form.Group as={Col} md="12" controlId="validationTitle">
+                            <Form.Control
+                                required
+                                type="text"
+                                name="description"
+                                placeholder="Enter The Task"
+                                value={this.state.item.description} 
+                                onChange={this.handleInputChange}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Please enter the task details.
+                            </Form.Control.Feedback>
+                            <Form.Control.Feedback>
+                                Looks good.
+                            </Form.Control.Feedback>
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} md="4" controlId="validationDate">
+                            <InputGroup>
+                                <InputGroup.Prepend>
+                                    <InputGroup.Text id="inputGroupPrepend">Date</InputGroup.Text>
+                                </InputGroup.Prepend>
+                                <Form.Control
+                                    type="date"
+                                    name="date"
+                                    aria-describedby="inputGroupPrepend"
+                                    value={this.state.item.date}
+                                    onChange={this.handleInputChange}
+                                    required
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Please choose a proper deadline.
+                                </Form.Control.Feedback>
+                                <Form.Control.Feedback>
+                                    Looks good.
+                                </Form.Control.Feedback>
+                            </InputGroup>
+                            </Form.Group>
+                            <Form.Group as={Col} md="4" controlId="validationTime">
+                            <InputGroup>
+                                <InputGroup.Prepend>
+                                    <InputGroup.Text id="inputGroupPrepend">Time</InputGroup.Text>
+                                </InputGroup.Prepend>
+                                <Form.Control
+                                    type="time"
+                                    name="time"
+                                    aria-describedby="inputGroupPrepend"
+                                    value={this.state.item.time}
+                                    onChange={this.handleInputChange}
+                                    required
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Please choose a proper reminder time.
+                                </Form.Control.Feedback>
+                                <Form.Control.Feedback>
+                                    Looks good.
+                                </Form.Control.Feedback>
+                            </InputGroup>
+                            </Form.Group>
+                            <Form.Group as={Col} md="4" controlId="validationLabel">
+                            <Form.Control 
+                                type="text"
+                                name="label"
+                                placeholder="Enter Label" 
+                                value={this.state.item.label}
+                                onChange={this.handleInputChange}
+                                required 
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Please enter label.
+                            </Form.Control.Feedback>
+                            <Form.Control.Feedback>
+                                Looks good.
+                            </Form.Control.Feedback>
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group className="offset-md-3 col-md-2 mb-3">
+                                <button class="btn btn-outline-primary btn-lg" type="submit" id="add-btn">Add</button>
+                            </Form.Group>
+                            <Form.Group className="offset-md-2 col-md-2 mb-3">
+                                <button class="btn btn-outline-danger btn-lg" type="reset" id="reset-btn">Reset</button>
+                            </Form.Group>
+                        </Form.Row>
+                    </Form>
+                </Modal.Body>
+                </Modal>
+            </>
+        )
+    }
 }
 
-export default addtask;
+export default Addtask;
