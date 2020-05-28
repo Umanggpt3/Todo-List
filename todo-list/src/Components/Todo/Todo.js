@@ -55,7 +55,7 @@ class Todo extends Component {
       ...this.state.todoItems
     ];
 
-    newitem.id = this.state.todoItems.length.toString();
+    newitem.id = (this.state.todoItems.length + 1).toString();
 
     newitems.push(newitem);
 
@@ -74,32 +74,37 @@ class Todo extends Component {
           show={this.state.show}
           onHide={this.toggleAddTask}
           submit={this.handleSubmit}
-          addNewTask={this.addNewTask}/>
-        <div className="todo-table">
-        <table class="table table-borderless table-responsive">
-          <thead class="thead-light">
-            <tr>
-              <th scope="col"></th>
-              <th scope="col">Title</th>
-              <th scope="col">Status</th>
-              <th scope="col">Label</th>
-              <th scope="col">Date</th>
-              <th scope="col">Time</th>
-            </tr>
-          </thead>
-          <tbody>
-          {this.state.todoItems.map(item => {
-            return <Task
-              key={item.id}
-              desc={item.description}
-              status={item.status}
-              label={item.label}
-              date={item.date}
-              time={item.time}
-            />
-          })}
-          </tbody>
-        </table>
+          addnewtask={this.addNewTask}/>
+        <div className={this.state.todoItems.length !== 0 ? "todo-table mr-bottom" : "todo-table"}>
+            {this.state.todoItems.length !== 0 ?
+              <table className="table table-borderless table-responsive">
+              <thead className="thead-light">
+                <tr className="head">
+                  <th scope="col"></th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Label</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Time</th>
+                </tr>
+              </thead>
+              <tbody>
+              {this.state.todoItems.map(item => {
+                return (
+                    <Task
+                    key={item.id}
+                    desc={item.description}
+                    status={item.status}
+                    label={item.label}
+                    date={item.date}
+                    time={item.time}
+                  />
+                )
+              })}
+              </tbody>
+              </table> :
+                <h6 className="text-center">Click on add tasks to see your tasks here.</h6>
+              }
         </div>
       </div>
     )

@@ -33,10 +33,24 @@ class Addtask extends React.Component {
         event.preventDefault();
         if (form.checkValidity() === false) {
             event.stopPropagation();
+            this.setValidated(true);
         } else {
-            this.props.addNewTask(this.state.item);
+            this.props.addnewtask(this.state.item);
+            let newitem = {
+                id: "",
+                description: "",
+                status: "New",
+                label: "",
+                date: "",
+                time: ""
+            }
+    
+            this.setState({
+                item: newitem
+            });
+
+            this.setValidated(false);
         }
-        this.setValidated(true);
     }
 
     handleReset = (event) => {
@@ -52,6 +66,8 @@ class Addtask extends React.Component {
         this.setState({
             item: newitem
         })
+
+        this.setValidated(false);
     }
 
     handleInputChange = (event) => {
@@ -79,7 +95,7 @@ class Addtask extends React.Component {
     render() {
 
         return (
-            <>
+            <div>
                 <Modal
                     {...this.props}
                     size="lg"
@@ -88,11 +104,16 @@ class Addtask extends React.Component {
                 >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        <h2 class="py-1" style={{fontWeight: 600}}>Add Task</h2>
+                        <h2 className="py-1" style={{fontWeight: 600}}>Add Task</h2>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form noValidate validated={this.state.validated} onSubmit={this.handleSubmit} onReset={this.handleReset}>
+                    <Form 
+                        noValidate 
+                        validated={this.state.validated} 
+                        onSubmit={this.handleSubmit} 
+                        onReset={this.handleReset}
+                    >
                         <Form.Row>
                             <Form.Group as={Col} md="12" controlId="validationTitle">
                             <Form.Control
@@ -173,16 +194,16 @@ class Addtask extends React.Component {
                         </Form.Row>
                         <Form.Row>
                             <Form.Group className="offset-md-3 col-md-2 mb-3">
-                                <button class="btn btn-outline-primary btn-lg" type="submit" id="add-btn">Add</button>
+                                <button className="btn btn-outline-primary btn-lg" type="submit" id="add-btn">Add</button>
                             </Form.Group>
                             <Form.Group className="offset-md-2 col-md-2 mb-3">
-                                <button class="btn btn-outline-danger btn-lg" type="reset" id="reset-btn">Reset</button>
+                                <button className="btn btn-outline-danger btn-lg" type="reset" id="reset-btn">Reset</button>
                             </Form.Group>
                         </Form.Row>
                     </Form>
                 </Modal.Body>
                 </Modal>
-            </>
+            </div>
         )
     }
 }

@@ -11,6 +11,10 @@
     color: #666666 !important;
 }
 
+.mr-bottom {
+    padding-bottom: 0rem;
+}
+
 table {
     margin: auto;
 }
