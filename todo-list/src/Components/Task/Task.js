@@ -25,8 +25,8 @@ class Task extends React.Component {
                 <th className={!this.state.checkBoxChecked ? "" : "strikeThrough"} scope="row">
                 <Form className="mb-3">
                     <Form.Group controlId="formBasicCheckbox">
-                        <Form.Check 
-                            type="checkbox" 
+                        <Form.Check
+                            type="checkbox"
                             checked={this.state.checkBoxChecked}
                             onChange={this.handleCheckBox}
                         />
