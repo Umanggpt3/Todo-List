@@ -5,54 +5,79 @@ import Navbar from '../Navbar/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort , faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Archive from '../Archive/Archive';
 import './Todo.css'
 
 class Todo extends Component {
 
+  originalData = [
+    {
+      id: "1",
+      description: "Buy ingredients to prepare dinner",
+      status: 'Completed',
+      label: 'Shopping',
+      date: '2020-02-15',
+      time: '12:30'
+    },
+    {
+      id: "2",
+      description: "Read Algebra and History textbook for upcoming test",
+      status: 'Pending',
+      label: 'Study',
+      date: '2020-02-14',
+      time: '12:30'
+    },
+    {
+      id: "3",
+      description: "Go to library to rent sally's books",
+      status: 'New',
+      label: 'Personal',
+      date: '2020-03-15',
+      time: '12:30'
+    },
+    {
+      id: "4",
+      description: "Write article on how to use django with react",
+      status: 'Pending',
+      label: 'Work',
+      date: '2019-02-15',
+      time: '12:30'
+    }
+  ];
+
   state = { 
     show: false,
-    todoItems: [
-      {
-        id: "1",
-        description: "Buy ingredients to prepare dinner",
-        status: 'Completed',
-        label: 'Shopping',
-        date: '2020-02-15',
-        time: '12:30'
-      },
-      {
-        id: "2",
-        description: "Read Algebra and History textbook for upcoming test",
-        status: 'Pending',
-        label: 'Study',
-        date: '2020-02-14',
-        time: '12:30'
-      },
-      {
-        id: "3",
-        description: "Go to library to rent sally's books",
-        status: 'New',
-        label: 'Personal',
-        date: '2020-03-15',
-        time: '12:30'
-      },
-      {
-        id: "4",
-        description: "Write article on how to use django with react",
-        status: 'Pending',
-        label: 'Work',
-        date: '2019-02-15',
-        time: '12:30'
-      }
-    ],
+    todoItems: [],
+    completedTodo: [],
     sortType: {
       status: '',
       label: '',
-      date: 'desc',
+      date: 'asc',
       time: ''
     },
     currentSort: "date"
   };
+
+  UNSAFE_componentWillMount() {
+    let todoData = [];
+    let completed = [];
+    this.originalData.map(item => {
+      if(item.status !== 'Completed') {
+        todoData.push(item);  
+      } else {
+        completed.push(item);
+      }
+    });
+
+    this.setState({
+        todoItems: todoData,
+        completedTodo: completed
+    });
+  }
+
+  componentDidMount() {
+    this.sortTasks('date');
+  }
 
   toggleAddTask = () => {
     this.setState({ show: !this.state.show })
@@ -88,7 +113,7 @@ class Todo extends Component {
     }
   }
 
-  compareValues = (key, order = 'asc') => {
+  compareValues = (key, order) => {
     return function innerSort(a, b) {
       if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) return 0;
       const comparison = a[key].localeCompare(b[key]);
@@ -109,7 +134,7 @@ class Todo extends Component {
     let order;
     
     if (this.state.sortType[val] === 'asc') {
-      order = 'desc'
+      order = 'desc';
     } else {
       order = 'asc';
     }
@@ -117,12 +142,34 @@ class Todo extends Component {
     newTodo.sort(this.compareValues(val, order));
     
     newSortType[val] = order;
-  
+
     this.setState({
       todoItems: newTodo,
       sortType: newSortType,
       currentSort: val
     });
+  }
+
+  completedTask = (desc) => {
+    let todoData = [];
+    let completed = [
+      ...this.state.completedTodo
+    ];
+    this.state.todoItems.map(item => {
+      if(desc.localeCompare(item.description) !== 0) {
+        todoData.push(item);
+      } else {
+        item.status = "Completed";
+        completed.push(item);
+      }
+    });
+    setTimeout(() => {
+      this.setState({
+        todoItems: todoData,
+        completedTodo: completed
+      });
+    }, 1000);
+    this.forceUpdate();
   }
 
   render() {
@@ -155,7 +202,7 @@ class Todo extends Component {
                     </div>
                   </th>
                   <th onClick={() => this.sortTasks("date")} scope="col">
-                    Date
+                    Due Date
                     <div className="sort-icon">
                       {this.getSortIcon("date")}
                     </div>
@@ -178,7 +225,7 @@ class Todo extends Component {
                     label={item.label}
                     date={item.date}
                     time={item.time}
-                  />
+                    completedTask={this.completedTask}/>
                 )
               })}
               </tbody>
@@ -186,6 +233,8 @@ class Todo extends Component {
                 <h6 className="text-center">Click on add tasks to see your tasks here.</h6>
               }
         </div>
+        <Archive 
+          doneItems={this.state.completedTodo}/>
       </div>
     )
   }

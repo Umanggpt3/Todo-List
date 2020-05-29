@@ -1,0 +1,47 @@
+.accordion {
+    position: relative;
+    margin: auto;
+    margin-top: 5vh;
+    padding: 0rem 0.5rem;
+    width: 85vw;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    color: #666666 !important;
+}
+
+.card-header .row {
+    margin-left: 0px !important;
+}
+
+.accordion:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.card-header svg {
+    position: relative !important;
+    margin-top: 0.5rem !important;
+    margin-left: auto !important;
+}
+
+.card-header .svg-inline--fa {
+    height: 2em !important;
+    width: 2.5em !important;
+    cursor: pointer;
+}
+
+.card-header h2 {
+    margin-top: 10px;
+    line-height: 1.0 !important;
+}
+
+.card {
+    border: none !important;
+    border-radius: inherit;
+}
+
+.card-header {
+    background-color: white !important;
+    display: inline-block !important;
+}

@@ -19,10 +19,10 @@
 .modal-header {
     border-top-left-radius: 1rem !important;
     border-top-right-radius: 1rem !important;
-    background-color: #007bff;
-    color: white;
+    background-color: #e9ecef;
+    color: #555555;
 }
 
 .close {
-    color: white !important;
+    color: #555555 !important;
 }
