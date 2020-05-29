@@ -11,3 +11,18 @@
     padding-left: 2.2rem !important;
     padding-right: 2.2rem !important;
 }
+
+.modal-content {
+    border-radius: 1rem;
+}
+
+.modal-header {
+    border-top-left-radius: 1rem !important;
+    border-top-right-radius: 1rem !important;
+    background-color: #007bff;
+    color: white;
+}
+
+.close {
+    color: white !important;
+}

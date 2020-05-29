@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Task from '../Task/Task';
 import AddTask from '../AddTask/AddTask';
 import Navbar from '../Navbar/Navbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSort , faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Todo.css'
 
@@ -23,7 +25,7 @@ class Todo extends Component {
         description: "Read Algebra and History textbook for upcoming test",
         status: 'Pending',
         label: 'Study',
-        date: '2020-02-15',
+        date: '2020-02-14',
         time: '12:30'
       },
       {
@@ -31,7 +33,7 @@ class Todo extends Component {
         description: "Go to library to rent sally's books",
         status: 'New',
         label: 'Personal',
-        date: '2020-02-15',
+        date: '2020-03-15',
         time: '12:30'
       },
       {
@@ -39,10 +41,17 @@ class Todo extends Component {
         description: "Write article on how to use django with react",
         status: 'Pending',
         label: 'Work',
-        date: '2020-02-15',
+        date: '2019-02-15',
         time: '12:30'
       }
-    ]
+    ],
+    sortType: {
+      status: '',
+      label: '',
+      date: 'desc',
+      time: ''
+    },
+    currentSort: "date"
   };
 
   toggleAddTask = () => {
@@ -65,6 +74,57 @@ class Todo extends Component {
     });
   }
 
+  getSortIcon = (val) => {
+    if (this.state.currentSort === val) {
+      if (this.state.sortType[val] === 'asc') {
+        return (<FontAwesomeIcon icon={faSortUp}></FontAwesomeIcon>);
+      } else if (this.state.sortType[val] === 'desc') {
+        return (<FontAwesomeIcon icon={faSortDown}></FontAwesomeIcon>);
+      } else {
+        return (<FontAwesomeIcon icon={faSort}></FontAwesomeIcon>);
+      }
+    } else {
+      return (<FontAwesomeIcon icon={faSort}></FontAwesomeIcon>);
+    }
+  }
+
+  compareValues = (key, order = 'asc') => {
+    return function innerSort(a, b) {
+      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) return 0;
+      const comparison = a[key].localeCompare(b[key]);
+  
+      return (
+        (order === 'desc') ? (comparison * -1) : comparison
+      );
+    };
+  }
+
+  sortTasks = (val) => {
+    let newTodo =  [
+      ...this.state.todoItems
+    ];
+
+    let newSortType = this.state.sortType;
+
+    let order;
+    
+    if (this.state.sortType[val] === 'asc') {
+      order = 'desc'
+    } else {
+      order = 'asc';
+    }
+
+    newTodo.sort(this.compareValues(val, order));
+    
+    newSortType[val] = order;
+  
+    this.setState({
+      todoItems: newTodo,
+      sortType: newSortType,
+      currentSort: val
+    });
+  }
+
   render() {
     return (
       <div>
@@ -82,10 +142,30 @@ class Todo extends Component {
                 <tr className="head">
                   <th scope="col"></th>
                   <th scope="col">Title</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Label</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Time</th>
+                  <th onClick={() => this.sortTasks("status")} scope="col">
+                    Status
+                    <div className="sort-icon">
+                      {this.getSortIcon("status")}
+                    </div>
+                  </th>
+                  <th onClick={() => this.sortTasks("label")} scope="col">
+                    Label
+                    <div className="sort-icon">
+                      {this.getSortIcon("label")}
+                    </div>
+                  </th>
+                  <th onClick={() => this.sortTasks("date")} scope="col">
+                    Date
+                    <div className="sort-icon">
+                      {this.getSortIcon("date")}
+                    </div>
+                  </th>
+                  <th onClick={() => this.sortTasks("time")} scope="col">
+                    Time
+                    <div className="sort-icon">
+                      {this.getSortIcon("time")}
+                    </div>
+                  </th>
                 </tr>
               </thead>
               <tbody>

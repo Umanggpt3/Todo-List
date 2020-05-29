@@ -19,6 +19,10 @@ table {
     margin: auto;
 }
 
+.table .thead-light th {
+    cursor: pointer;
+}
+
 .table-responsive {
     display: table !important;
 }
@@ -33,6 +37,21 @@ table {
 
 .todo-table:hover {
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.not-visible {
+    display: none !important;
+}
+
+svg {
+    position: absolute;
+    margin-top: -15px;
+    margin-left: 5px;
+}
+
+.sort-icon {
+    position: relative;
+    display: inline-block;
 }
 
 @media screen and (max-width: 768px) {

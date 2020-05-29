@@ -17,13 +17,13 @@ const navbar = (props) => {
                     <Navbar.Text className="px-3">Welcome Umang</Navbar.Text>
                 </Nav>
             </Navbar>
-            <Navbar collapseOnSelect expand="sm" bg="light" variant="light" className="fixedTop-2 mx-auto">
+            <Navbar collapseOnSelect bg="light" variant="light" className="fixedTop-2 mx-auto">
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="nav-2 mx-auto">
                         <Form as={Row}>
                             <Form.Group as={Col} lg="2" controlId="validationDate">
-                                <Button className="addtask-btn" variant="dark" onClick={props.toggleModal}>+ Add Task</Button>
+                                <Button className="addtask-btn btn-block" variant="dark" onClick={props.toggleModal}>+ Add Task</Button>
                             </Form.Group>
                             <Form.Group as={Col} lg="4" controlId="validationDate">
                             <InputGroup>
@@ -63,8 +63,8 @@ const navbar = (props) => {
                                 </Form.Control.Feedback>
                             </InputGroup>
                             </Form.Group>
-                            <Form.Group as={Col} lg="1" controlId="validationDate">
-                                <Button className="search-btn" variant="primary" type="submit">Search</Button>
+                            <Form.Group as={Col} lg="2" controlId="validationDate">
+                                <Button className="search-btn btn-block" variant="primary" type="submit">Search</Button>
                             </Form.Group>
                         </Form>
                     </Nav>

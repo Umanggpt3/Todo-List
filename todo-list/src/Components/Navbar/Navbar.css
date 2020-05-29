@@ -20,18 +20,10 @@
     width: 75vw;
 }
 
-.addtask-btn {
-    padding-left: 1.6rem !important;
-    padding-right: 1.6rem !important;
-}
-
-.search-btn {
-    padding-left: 3rem !important;
-    padding-right: 3rem !important;
-}
-
 .nav-2 .row {
     width: inherit;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
 }
 
 .navbar-text {
