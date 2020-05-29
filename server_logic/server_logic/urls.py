@@ -26,5 +26,6 @@ urlpatterns = [
     path('user/login/',handle_user_login,name="user_login"),
     path('user/signup/',handle_user_signup),
     path('user/getinfo/',get_user_info),
-    path('user/logout/',user_logout)
+    path('user/logout/',user_logout),
+    path('item/',include(r.urls))
 ]
