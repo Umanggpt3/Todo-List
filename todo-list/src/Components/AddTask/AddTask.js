@@ -14,7 +14,7 @@ class Addtask extends React.Component {
             item: {
                 id: "",
                 description: "",
-                status: "New",
+                status: "Ongoing",
                 label: "",
                 date: "",
                 time: ""
@@ -39,7 +39,7 @@ class Addtask extends React.Component {
             let newitem = {
                 id: "",
                 description: "",
-                status: "New",
+                status: "Ongoing",
                 label: "",
                 date: "",
                 time: ""
