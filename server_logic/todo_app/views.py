@@ -90,13 +90,16 @@ def get_item(request):
     item_id=request.data.get('item_id')
     try:
         it=TodoItem.objects.get(id=item_id)
+        if it.user!=request.user:
+            return Response({"error":"invalid user!"})
         return Response({'item':TodoItemSerializer(it).data},status=HTTP_200_OK)
     except Exception as e:
         return Response({'error':e.__str__},status=HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','POST'])
 def get_all(request):
-    obj_set=TodoItem.objects.all()
+    cur_usr=request.user
+    obj_set=TodoItem.objects.filter(user=cur_usr)
     obj_list=[]
     for o in obj_set:
         obj_list.append(TodoItemSerializer(o).data)
@@ -107,6 +110,8 @@ def update_item(request):
     item_id=request.data.get('item_id')
     try:
         it=TodoItem.objects.get(id=item_id)
+        if it.user!=request.user:
+            return Response({"error":"invalid user!"})
         it.item_title=request.data.get('item_title')
         it.item_description=request.data.get('item_description')
         due_date_time_str=request.data.get('due_date_time')
@@ -121,5 +126,9 @@ def update_item(request):
 @api_view(['POST'])
 def delete_item(request):
     del_id=request.data.get('item_id')
-    (TodoItem.objects.filter(item_id=del_id)).delete()
+    d=(TodoItem.objects.filter(id=del_id))
+    for it in d:
+        if it.user!=request.user:
+            return Response({"error":"invalid user!"})
+    d.delete()
     return Response(status=HTTP_200_OK)
