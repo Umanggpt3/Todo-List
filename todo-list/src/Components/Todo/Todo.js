@@ -1,54 +1,55 @@
 import React, { Component } from 'react';
 import Task from '../Task/Task';
 import AddTask from '../AddTask/AddTask';
-import Navbar from '../Navbar/Navbar';
+import NavbarAbove from '../Navbar/Navbar';
+import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort , faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Archive from '../Archive/Archive';
+import logo from './preview.png';
 import './Todo.css'
 
 class Todo extends Component {
-
-  originalData = [
-    {
-      id: "1",
-      description: "Buy ingredients to prepare dinner",
-      status: 'Completed',
-      label: 'Shopping',
-      date: '2020-02-15',
-      time: '12:30'
-    },
-    {
-      id: "2",
-      description: "Read Algebra and History textbook for upcoming test",
-      status: 'Pending',
-      label: 'Study',
-      date: '2020-02-14',
-      time: '12:30'
-    },
-    {
-      id: "3",
-      description: "Go to library to rent sally's books",
-      status: 'New',
-      label: 'Personal',
-      date: '2020-03-15',
-      time: '12:30'
-    },
-    {
-      id: "4",
-      description: "Write article on how to use django with react",
-      status: 'Pending',
-      label: 'Work',
-      date: '2019-02-15',
-      time: '12:30'
-    }
-  ];
 
   state = { 
     show: false,
     todoItems: [],
     completedTodo: [],
+    originalData: [
+      {
+        id: "1",
+        description: "Buy ingredients to prepare dinner",
+        status: 'Completed',
+        label: 'Shopping',
+        date: '2020-02-15',
+        time: '12:30'
+      },
+      {
+        id: "2",
+        description: "Read Algebra and History textbook for upcoming test",
+        status: 'Pending',
+        label: 'Study',
+        date: '2020-06-02',
+        time: '12:30'
+      },
+      {
+        id: "3",
+        description: "Go to library to rent sally's books",
+        status: 'Ongoing',
+        label: 'Personal',
+        date: '2020-06-05',
+        time: '12:30'
+      },
+      {
+        id: "4",
+        description: "Write article on how to use django with react",
+        status: 'Pending',
+        label: 'Work',
+        date: '2020-02-15',
+        time: '12:30'
+      }
+    ],
     sortType: {
       status: '',
       label: '',
@@ -61,7 +62,7 @@ class Todo extends Component {
   UNSAFE_componentWillMount() {
     let todoData = [];
     let completed = [];
-    this.originalData.map(item => {
+    this.state.originalData.map(item => {
       if(item.status !== 'Completed') {
         todoData.push(item);  
       } else {
@@ -89,13 +90,29 @@ class Todo extends Component {
       ...this.state.todoItems
     ];
 
-    newitem.id = (this.state.todoItems.length + 1).toString();
+    let newOGData = [
+      ...this.state.originalData
+    ]
+
+    newitem.id = (this.state.originalData.length + 1).toString();
+
+    let nowDate = Date.now();
+    let dueDate = new Date(newitem.date);
+
+    let daysDiff = (dueDate.getTime() - nowDate) / (1000 * 3600 * 24);
+    console.log(daysDiff);
+
+    if (daysDiff <= 2) {
+      newitem.status = "Pending";
+    }
 
     newitems.push(newitem);
+    newOGData.push(newitem);
 
     this.setState({
       show: this.state.show,
-      todoItems: newitems
+      todoItems: newitems,
+      originalData: newOGData
     });
   }
 
@@ -150,7 +167,7 @@ class Todo extends Component {
     });
   }
 
-  completedTask = (desc) => {
+  completedTask = (desc, date, time) => {
     let todoData = [];
     let completed = [
       ...this.state.completedTodo
@@ -160,6 +177,8 @@ class Todo extends Component {
         todoData.push(item);
       } else {
         item.status = "Completed";
+        item.date = date;
+        item.time = time;
         completed.push(item);
       }
     });
@@ -168,15 +187,66 @@ class Todo extends Component {
         todoItems: todoData,
         completedTodo: completed
       });
-    }, 1000);
-    this.forceUpdate();
+    }, 500);
+  }
+
+  searchFunction = (fromDate, toDate, val = 1) => {
+    if(val == 1) {
+      let newTodo = [];
+
+      this.state.todoItems.map(item => {
+        let current = new Date(item.date + " 00:00:00");
+        let fDate = new Date(fromDate + " 00:00:00");
+        let tDate = new Date(toDate + " 00:00:00");
+
+        let fDaysDiff = (current.getTime() - fDate.getTime()) / (1000 * 3600 * 24);
+        let tDaysDiff = (current.getTime() - tDate.getTime()) / (1000 * 3600 * 24);
+        
+        if(fDaysDiff >= 0 && tDaysDiff <= 0) {
+          newTodo.push(item);
+        }
+      });
+
+      if(newTodo.length !== 0) {
+        this.setState({
+          todoItems: newTodo
+        });
+      } else {
+        alert("No Search Results.");
+      }
+    } else {
+      let todoData = [];
+      let newSortType = this.state.sortType;
+
+      this.state.originalData.map(item => {
+        if(item.status !== 'Completed') {
+          todoData.push(item);  
+        }
+      });
+
+      if (newSortType[this.state.currentSort] === 'asc') {
+        newSortType[this.state.currentSort] = 'desc';
+      } else if (newSortType[this.state.currentSort] === 'desc') {
+        newSortType[this.state.currentSort] = 'asc';
+      } 
+
+      this.setState({
+        todoItems: todoData,
+        sortType: newSortType
+      }, () => {
+        console.log(todoData);
+        console.log(this.state.todoItems);
+        this.sortTasks(this.state.currentSort);
+      });
+    }
   }
 
   render() {
     return (
       <div>
-        <Navbar 
-          toggleModal={this.toggleAddTask}/>
+        <NavbarAbove 
+          toggleModal={this.toggleAddTask}
+          searchFunction={this.searchFunction}/>
         <AddTask 
           show={this.state.show}
           onHide={this.toggleAddTask}
@@ -230,7 +300,10 @@ class Todo extends Component {
               })}
               </tbody>
               </table> :
-                <h6 className="text-center">Click on add tasks to see your tasks here.</h6>
+              <div className="text-center">
+                <Image src={logo} fluid />
+                <h6 className="text-center">All done for now.<br></br>Click on add task to keep track of your tasks.</h6>
+              </div>
               }
         </div>
         <Archive 

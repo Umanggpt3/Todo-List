@@ -14,3 +14,7 @@ input[type=checkbox]:checked {
 .strikeThrough {
     text-decoration: line-through;
 }
+
+td .btn {
+    cursor: default !important;
+}

@@ -31,6 +31,12 @@
     color: #eeeeee !important;
 }
 
+.search-btn svg {
+    position: relative !important;
+    margin-top: 0px !important;
+    margin-left: 0px !important;
+}
+
 @media screen and (max-width: 576px) {
     .fixedTop-2 {
         padding-top: 1vh !important;
