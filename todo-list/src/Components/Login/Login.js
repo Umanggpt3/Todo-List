@@ -5,6 +5,11 @@ import Button from 'react-bootstrap/Button';
 import './Login.css'
 
 class Login extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         return (
             <Form className="loginForm" noValidate >
@@ -40,7 +45,7 @@ class Login extends Component {
                 </Form.Group>
                 <Form.Row>
                     <Form.Group as={Col} md={12}>
-                        <Button type="submit">Sign In</Button>
+                        <Button type="submit" variant="primary btn-block">Sign In</Button>
                     </Form.Group>
                 </Form.Row>
             </Form>
