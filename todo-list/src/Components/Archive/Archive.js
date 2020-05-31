@@ -9,9 +9,15 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Task from '../Task/Task';
 
-function CustomToggle({ children, eventKey }) {
+function CustomToggle1({ children, eventKey }) {
     return (
         <FontAwesomeIcon icon={faAngleDown} onClick={useAccordionToggle(eventKey)}></FontAwesomeIcon>
+    );
+}
+
+function CustomToggle2({ children, eventKey }) {
+    return (
+        <FontAwesomeIcon icon={faAngleUp} onClick={useAccordionToggle(eventKey)}></FontAwesomeIcon>
     );
 }
 
@@ -19,6 +25,15 @@ class Archive extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            isOpen: false
+        }
+    }
+
+    accordionChange = (val) => {
+        this.setState({
+            isOpen: val
+        });
     }
 
     render() {
@@ -28,7 +43,11 @@ class Archive extends React.Component {
                     <Card.Header>
                         <Row>
                             <h2 as={Col}>Archive</h2>
-                            <CustomToggle as={Col} eventKey="0" />
+                            <div as={Col} className="ml-auto" onClick={() => this.accordionChange(!this.state.isOpen)}>
+                                {this.state.isOpen === false ? 
+                                <CustomToggle1 eventKey="0" /> : 
+                                <CustomToggle2 eventKey="0" />}
+                            </div>
                         </Row>
                     </Card.Header>
                     <Accordion.Collapse eventKey="0">

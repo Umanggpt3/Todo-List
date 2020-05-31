@@ -62,7 +62,7 @@ class Todo extends Component {
   UNSAFE_componentWillMount() {
     let todoData = [];
     let completed = [];
-    this.state.originalData.map(item => {
+    this.state.originalData.forEach(item => {
       if(item.status !== 'Completed') {
         todoData.push(item);  
       } else {
@@ -81,8 +81,7 @@ class Todo extends Component {
   }
 
   toggleAddTask = () => {
-    this.setState({ show: !this.state.show })
-    console.log(this.state.show);
+    this.setState({ show: !this.state.show });
   }
 
   addNewTask = (newitem) => {
@@ -100,7 +99,6 @@ class Todo extends Component {
     let dueDate = new Date(newitem.date);
 
     let daysDiff = (dueDate.getTime() - nowDate) / (1000 * 3600 * 24);
-    console.log(daysDiff);
 
     if (daysDiff <= 2) {
       newitem.status = "Pending";
@@ -113,6 +111,20 @@ class Todo extends Component {
       show: this.state.show,
       todoItems: newitems,
       originalData: newOGData
+    }, () => {
+      let newSortType = this.state.sortType;
+
+      if (newSortType[this.state.currentSort] === 'asc') {
+        newSortType[this.state.currentSort] = 'desc';
+      } else if (newSortType[this.state.currentSort] === 'desc') {
+        newSortType[this.state.currentSort] = 'asc';
+      } 
+
+      this.setState({
+        sortType: newSortType
+      }, () => {
+        this.sortTasks(this.state.currentSort);
+      });
     });
   }
 
@@ -172,7 +184,7 @@ class Todo extends Component {
     let completed = [
       ...this.state.completedTodo
     ];
-    this.state.todoItems.map(item => {
+    this.state.todoItems.forEach(item => {
       if(desc.localeCompare(item.description) !== 0) {
         todoData.push(item);
       } else {
@@ -191,10 +203,10 @@ class Todo extends Component {
   }
 
   searchFunction = (fromDate, toDate, val = 1) => {
-    if(val == 1) {
+    if(val === 1) {
       let newTodo = [];
 
-      this.state.todoItems.map(item => {
+      this.state.todoItems.forEach(item => {
         let current = new Date(item.date + " 00:00:00");
         let fDate = new Date(fromDate + " 00:00:00");
         let tDate = new Date(toDate + " 00:00:00");
@@ -218,7 +230,7 @@ class Todo extends Component {
       let todoData = [];
       let newSortType = this.state.sortType;
 
-      this.state.originalData.map(item => {
+      this.state.originalData.forEach(item => {
         if(item.status !== 'Completed') {
           todoData.push(item);  
         }
@@ -234,8 +246,6 @@ class Todo extends Component {
         todoItems: todoData,
         sortType: newSortType
       }, () => {
-        console.log(todoData);
-        console.log(this.state.todoItems);
         this.sortTasks(this.state.currentSort);
       });
     }
@@ -243,7 +253,7 @@ class Todo extends Component {
 
   render() {
     return (
-      <div>
+      <div className="belowBody">
         <NavbarAbove 
           toggleModal={this.toggleAddTask}
           searchFunction={this.searchFunction}/>

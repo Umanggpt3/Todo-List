@@ -1,0 +1,13 @@
+.landing {
+    background-color: white;
+    height: inherit;
+    color: #555555;
+}
+
+.landing .row {
+    height: inherit;
+}
+
+.sign h2 {
+    padding: 1rem;
+}

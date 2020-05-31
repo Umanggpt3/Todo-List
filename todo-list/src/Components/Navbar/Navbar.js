@@ -34,9 +34,9 @@ class NavbarAbove extends React.Component {
         let tDate = new Date(this.state.toDate + " 00:00:00");
         
         let daysDiff = (tDate.getTime() - fDate.getTime()) / (1000 * 3600 * 24);
-        console.log(daysDiff);
+        
         if (form.checkValidity() === false || (daysDiff < 0 && daysDiff !== "NaN")) {
-            console.log("In here");
+            
             event.stopPropagation();
             
             if(daysDiff < 0) {
@@ -116,7 +116,7 @@ class NavbarAbove extends React.Component {
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please choose a proper deadline.
+                                        Please choose a proper date.
                                     </Form.Control.Feedback>
                                     <Form.Control.Feedback>
                                         Looks good.
@@ -137,7 +137,7 @@ class NavbarAbove extends React.Component {
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please choose a proper deadline.
+                                        Please choose a proper date.
                                     </Form.Control.Feedback>
                                     <Form.Control.Feedback>
                                         Looks good.

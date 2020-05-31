@@ -7,10 +7,20 @@ body {
   background: #007bff;
   height: auto;
   width: auto;
-  padding-top: 2rem;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.App {
+  background: #ffffff !important;
+  height: 100vh !important;
+  margin-bottom: -3.5vh;
 }

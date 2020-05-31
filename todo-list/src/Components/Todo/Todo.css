@@ -11,6 +11,10 @@
     color: #666666 !important;
 }
 
+.belowBody {
+    padding-top: 3.5rem;
+}
+
 .mr-bottom {
     padding-bottom: 0rem;
 }

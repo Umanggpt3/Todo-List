@@ -72,6 +72,8 @@ class Addtask extends React.Component {
 
     handleInputChange = (event) => {
         const target = event.target;
+
+        let newitem = this.state.item;
         let value;
         if(target.name === "description") {
             value = target.value;
@@ -85,10 +87,10 @@ class Addtask extends React.Component {
 
         const name = target.name;
     
-        this.state.item[name] = value;
+        newitem[name] = value;
     
         this.setState({
-            item: this.state.item
+            item: newitem
         })
     }
 

@@ -2,6 +2,8 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import './Task.css';
 
+/*eslint no-extend-native: ["error", { "exceptions": ["Date"] }]*/
+
 Date.prototype.yyyymmdd = function() {
     let mm = this.getMonth() + 1;
     let dd = this.getDate();
@@ -67,8 +69,9 @@ class Task extends React.Component {
 
     render() {
         return (
-            <tr>
+            <tr className="active">
                 <th className={this.props.comp === 'Archive' ? "strikeThrough" : (!this.state.checkBoxChecked ? "" : "strikeThrough")} scope="row">
+                <div>
                 <Form className="mb-3">
                     <Form.Group controlId="formBasicCheckbox">
                         <Form.Check
@@ -79,6 +82,7 @@ class Task extends React.Component {
                         />
                     </Form.Group>
                 </Form>
+                </div>
                 </th>
                 <td 
                     className={this.props.comp === 'Archive' ? 
@@ -86,7 +90,7 @@ class Task extends React.Component {
                     !this.state.checkBoxChecked ? 
                     "" : 
                     "strikeThrough"}>
-                        {this.props.desc}
+                    <div>{this.props.desc}</div>    
                 </td>
                 <td 
                     className={this.props.comp === 'Archive' ? 
@@ -94,7 +98,7 @@ class Task extends React.Component {
                     !this.state.checkBoxChecked ? 
                     "" : 
                     "strikeThrough"}>
-                        {this.prettyStatus()}
+                    <div>{this.prettyStatus()}</div>    
                 </td>
                 <td 
                     className={this.props.comp === 'Archive' ? 
@@ -102,7 +106,7 @@ class Task extends React.Component {
                     !this.state.checkBoxChecked ? 
                     "" : 
                     "strikeThrough"}>
-                        {this.props.label}
+                    <div>{this.props.label}</div>    
                 </td>
                 <td 
                     className={this.props.comp === 'Archive' ? 
@@ -110,7 +114,7 @@ class Task extends React.Component {
                     !this.state.checkBoxChecked ? 
                     "" : 
                     "strikeThrough"}>
-                        {this.props.date}
+                    <div>{this.props.date}</div>    
                 </td>
                 <td 
                     className={this.props.comp === 'Archive' ? 
@@ -118,7 +122,7 @@ class Task extends React.Component {
                     !this.state.checkBoxChecked ? 
                     "" : 
                     "strikeThrough"}>
-                        {this.props.time}
+                    <div>{this.props.time}</div>    
                 </td>
             </tr>
         )
