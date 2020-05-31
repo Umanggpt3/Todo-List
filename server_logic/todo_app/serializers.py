@@ -8,7 +8,9 @@ class UserSerializer(serializers.ModelSerializer):
         fields=('username','first_name','last_name','email')
 
 class TodoItemSerializer(serializers.ModelSerializer):
+    user=UserSerializer()
     class Meta:
         model=TodoItem
-        fields='__all__'
+        #fields='__all__'
+        fields=('id','item_title','item_description','completed','due_date_time','date_time_set','date_time_modified','user')
 
