@@ -80,6 +80,25 @@ class NavbarAbove extends React.Component {
         }
     }
 
+    logoutCall = () => {
+        let token = ("Token " + this.props.authToken).toString();
+        
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": token,
+            }
+        };
+
+        fetch('http://127.0.0.1:8000/user/logout/', requestOptions)
+        .then(response => response)
+        .then(data => {
+            console.log(data);
+            this.props.aFunctionCall(null);
+        });
+    }
+
     render() {
 
         const bgDark = {
@@ -126,7 +145,7 @@ class NavbarAbove extends React.Component {
                     <Navbar.Brand href="#home">Todo List</Navbar.Brand>
                     <Nav className="justify-content-end ml-auto">
                         <NavDropdown style={abs} className="position-absolute" title="Welcome Umang" id="basic-nav-dropdown">
-                            <NavDropdown.Item style={this.props.isDark === true ? navButtonDark : navButtonLight} href="#action/3.1">Logout</NavDropdown.Item>
+                            <NavDropdown.Item onClick={this.logoutCall} style={this.props.isDark === true ? navButtonDark : navButtonLight}>Logout</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                 </Navbar>

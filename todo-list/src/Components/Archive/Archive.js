@@ -100,7 +100,7 @@ class Archive extends React.Component {
                                 })}
                                 </tbody>
                                 </table> :
-                                    <h6 className="text-center">Click on add tasks to see your tasks here.</h6>
+                                    <h6 className="text-center">Complete tasks to see them here.</h6>
                                 }
                             </div>
                         </Card.Body>

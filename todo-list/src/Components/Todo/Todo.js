@@ -16,40 +16,7 @@ class Todo extends Component {
     show: false,
     todoItems: [],
     completedTodo: [],
-    originalData: [
-      {
-        id: "1",
-        description: "Buy ingredients to prepare dinner",
-        status: 'Completed',
-        label: 'Shopping',
-        date: '2020-02-15',
-        time: '12:30'
-      },
-      {
-        id: "2",
-        description: "Read Algebra and History textbook for upcoming test",
-        status: 'Pending',
-        label: 'Study',
-        date: '2020-06-02',
-        time: '12:30'
-      },
-      {
-        id: "3",
-        description: "Go to library to rent sally's books",
-        status: 'Ongoing',
-        label: 'Personal',
-        date: '2020-06-05',
-        time: '12:30'
-      },
-      {
-        id: "4",
-        description: "Write article on how to use django with react",
-        status: 'Pending',
-        label: 'Work',
-        date: '2020-02-15',
-        time: '12:30'
-      }
-    ],
+    originalData: [],
     sortType: {
       status: '',
       label: '',
@@ -62,17 +29,52 @@ class Todo extends Component {
   UNSAFE_componentWillMount() {
     let todoData = [];
     let completed = [];
-    this.state.originalData.forEach(item => {
-      if(item.status !== 'Completed') {
-        todoData.push(item);  
-      } else {
-        completed.push(item);
-      }
-    });
 
-    this.setState({
-        todoItems: todoData,
-        completedTodo: completed
+    let token = ("Token " + this.props.authToken).toString();
+        
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            "Content-Type": "application/json",
+            "Authorization": token,
+        }
+    };
+
+    fetch('http://127.0.0.1:8000/item/get_all', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+
+        let OGdata = [];
+
+        data.forEach(item => {
+          let newData = {
+            id: item["id"],
+            description: item["description"],
+            status: item["status"],
+            label: item["label"],
+            date: item["due_date_time"].slice(0,10),
+            time: item["due_date_time"].slice(11,19)
+          };
+          OGdata.push(newData);
+        })
+        
+        this.setState({
+          originalData: OGdata
+        }, () => {
+          this.state.originalData.forEach(item => {
+            if(item.status !== 'Completed') {
+              todoData.push(item);  
+            } else {
+              completed.push(item);
+            }
+          });
+      
+          this.setState({
+              todoItems: todoData,
+              completedTodo: completed
+          });
+        });
     });
   }
 
@@ -258,6 +260,10 @@ class Todo extends Component {
     }
   }
 
+  aFunctionCall = (data) => {
+    this.props.changeLogin(data);
+  }
+
   render() {
 
     const dark = {
@@ -285,13 +291,19 @@ class Todo extends Component {
         <NavbarAbove 
           toggleModal={this.toggleAddTask}
           searchFunction={this.searchFunction}
-          isDark={this.props.isDark}/>
+          isDark={this.props.isDark}
+          aFunctionCall={this.aFunctionCall}
+          authToken={this.props.authToken}
+          />
+
         <AddTask 
           show={this.state.show}
           onHide={this.toggleAddTask}
           submit={this.handleSubmit}
           addnewtask={this.addNewTask}
-          isDark={this.props.isDark}/>
+          isDark={this.props.isDark}
+          authToken={this.props.authToken}/>
+
         <div style={this.props.isDark === true ? dark : light} className={this.state.todoItems.length !== 0 ? "todo-table mr-bottom" : "todo-table"}>
             {this.state.todoItems.length !== 0 ?
               <table style={this.props.isDark === true ? dark : light} className="table table-borderless table-responsive">

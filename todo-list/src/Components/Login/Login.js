@@ -32,22 +32,23 @@ class Login extends Component {
             this.setValidated(true);
         } else {
             if(this.props.loggedIn !== true) {
+                let loginData = {
+                    "username": this.state.user.username,
+                    "password": this.state.user.password
+                }
 
-                this.props.aFunctionCall();
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(loginData)
+                };
 
-                // let xhr = new XMLHttpRequest();
-                // let userInfo = JSON.stringify({
-                //     "username":"CaptainClaw",
-                //     "password":"password"
-                //    });
-
-                // xhr.addEventListener('load', () => {
-                //     console.log(xhr.responseText);
-                // });
-                
-                // xhr.open('POST', 'http://127.0.0.1:8000/user/login/');
-                // xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-                // xhr.send(userInfo);
+                fetch('http://127.0.0.1:8000/user/login/', requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    this.props.aFunctionCall(data);
+                });
             }
             this.setValidated(false);
         }

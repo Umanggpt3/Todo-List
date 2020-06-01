@@ -28,6 +28,35 @@ class Addtask extends React.Component {
         })
     }
 
+    addNewTask = () => {
+        let sendItem = {
+            "description": this.state.item.description,
+            "status": this.state.item.status,
+            "label": this.state.item.label,
+            "date": this.state.item.date,
+            "time": this.state.item.time
+        }
+
+        let token = ("Token " + this.props.authToken).toString();
+        
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": token,
+            },
+            body: JSON.stringify(sendItem) 
+        };
+
+        fetch('http://127.0.0.1:8000/item/create', requestOptions)
+        .then(response => response)
+        .then(data => {
+            console.log(data);
+        });
+
+        this.props.addnewtask(this.state.item);
+    }
+
     handleSubmit = (event) => {
         const form = event.currentTarget;
         event.preventDefault();
@@ -35,7 +64,7 @@ class Addtask extends React.Component {
             event.stopPropagation();
             this.setValidated(true);
         } else {
-            this.props.addnewtask(this.state.item);
+            this.addNewTask();
             let newitem = {
                 id: "",
                 description: "",

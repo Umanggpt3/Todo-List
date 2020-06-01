@@ -18,8 +18,8 @@ class Landing extends React.Component {
         };
     }
 
-    aFunctionCall = () => {
-        this.props.changeLogin();
+    aFunctionCall = (data) => {
+        this.props.changeLogin(data);
     }
 
     changeText = () => {
@@ -35,23 +35,7 @@ class Landing extends React.Component {
             });
         }
     }
-
-    componentDidMount() {
-        if(this.props.isDark === true) {
-            document.body.style.backgroundColor = "#222";
-        } else {
-            document.body.style.backgroundColor = "#fff";
-        }
-    }
     
-    componentDidUpdate() {
-        if(this.props.isDark === true) {
-            document.body.style.backgroundColor = "#222";
-        } else {
-            document.body.style.backgroundColor = "#fff";
-        }
-    }
-
     render() {
 
         const dark = {
@@ -78,8 +62,9 @@ class Landing extends React.Component {
                         {this.state.visible === "login" ?
                             <Login 
                                 loggedIn={this.props.loggedIn}
-                                aFunctionCall={this.aFunctionCall}
                                 isDark={this.props.isDark}
+                                aFunctionCall={this.aFunctionCall}
+                                authToken={this.props.authToken}
                             /> :
                             <SignUp 
                                 loggedIn={this.props.loggedIn}

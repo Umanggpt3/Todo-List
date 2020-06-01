@@ -9,8 +9,26 @@ class App extends Component {
 
   state = {
     loggedIn: false,
-    checked: false
+    checked: false,
+    authToken: ""
   }
+
+  componentDidMount() {
+    if(this.state.checked === true) {
+        document.body.style.backgroundColor = "#222";
+    } else {
+        document.body.style.backgroundColor = "#fff";
+    }
+  }
+
+  componentDidUpdate() {
+    if(this.state.checked === true) {
+        document.body.style.backgroundColor = "#222";
+    } else {
+        document.body.style.backgroundColor = "#fff";
+    }
+  }
+
 
   toggleEnabled = () => {
     this.setState({
@@ -18,9 +36,10 @@ class App extends Component {
     });
   }
 
-  changeLogin = () => {
+  changeLogin = (data) => {
     this.setState({
-      loggedIn: !this.state.loggedIn
+      loggedIn: data === null ? false : true,
+      authToken: data["auth_token"]
     });
   }
 
@@ -49,11 +68,14 @@ class App extends Component {
         {this.state.loggedIn === true ?
         <Todo 
           isDark={this.state.checked}
+          authToken={this.state.authToken}
+          changeLogin={this.changeLogin}
         /> :
         <Landing 
           loggedIn={this.state.loggedIn}
           changeLogin={this.changeLogin}
           isDark={this.state.checked}
+          authToken={this.state.authToken}
         />}
         <Form style={toggle}>
           <Form.Check 
