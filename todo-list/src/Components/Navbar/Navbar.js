@@ -81,7 +81,7 @@ class NavbarAbove extends React.Component {
 
     render() {
         return (
-            <div>
+            <div style={{background: "#007bff"}}>
                 <Navbar collapseOnSelect expand="sm" bg="primary" variant="dark" fixed="top" className="fixedTop-1">
                     <Navbar.Brand href="#home">Todo List</Navbar.Brand>
                     <Nav className="justify-content-end ml-auto">

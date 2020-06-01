@@ -1,11 +1,12 @@
 .landing {
     background-color: white;
-    height: inherit;
+    height: auto;
     color: #555555;
 }
 
 .landing .row {
-    height: inherit;
+    padding-top: 10vh;
+    height: auto;
 }
 
 .sign h2 {
@@ -19,4 +20,19 @@
 
 .sign p:hover {
     color: #007bff;
+}
+
+@media screen and (max-width: 768px) {
+    .landing .row {
+        padding-top: 5vh;
+    }
+
+    .image img {
+        margin-top: 5vh;
+        margin-bottom: 5vh;
+    }
+
+    .sign {
+        margin-top: 10vh !important;
+    }
 }

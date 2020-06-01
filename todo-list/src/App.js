@@ -10,30 +10,36 @@ class App extends Component {
     loggedIn: false
   }
 
-  componentDidMount() {
-    let xhr = new XMLHttpRequest();
-    let xhr1 = new XMLHttpRequest();
-    let userInfo = JSON.stringify({
-      "username":"CaptainClaw",
-      "password":"password"
-    });
+  // componentDidMount() {
+  //   let xhr = new XMLHttpRequest();
+  //   let xhr1 = new XMLHttpRequest();
+  //   let userInfo = JSON.stringify({
+  //     "username":"CaptainClaw",
+  //     "password":"password"
+  //   });
 
-    xhr.addEventListener('load', () => {
-      console.log(xhr.responseText)
-    });
+  //   xhr.addEventListener('load', () => {
+  //     console.log(xhr.responseText)
+  //   });
 
-    xhr1.addEventListener('load', () => {
-      console.log(xhr1.responseText)
-    });
+  //   xhr1.addEventListener('load', () => {
+  //     console.log(xhr1.responseText)
+  //   });
     
-    xhr.open('POST', 'http://127.0.0.1:8000/user/login/');
-    xhr1.open('POST', 'http://127.0.0.1:8000/item/get_all');
+  //   xhr.open('POST', 'http://127.0.0.1:8000/user/login/');
+  //   xhr1.open('POST', 'http://127.0.0.1:8000/item/get_all');
 
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr1.setRequestHeader("Authorization","Token 1b825501c7578d19c45d89704e733607fe4e200d");
+  //   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  //   xhr1.setRequestHeader("Authorization","Token 1b825501c7578d19c45d89704e733607fe4e200d");
 
-    xhr.send(userInfo);
-    xhr1.send();
+  //   xhr.send(userInfo);
+  //   xhr1.send();
+  // }
+
+  changeLogin = () => {
+    this.setState({
+      loggedIn: !this.state.loggedIn
+    });
   }
 
   render() {
@@ -41,7 +47,10 @@ class App extends Component {
       <div className={this.state.loggedIn === true ? "" : "App"}>
         {this.state.loggedIn === true ?
         <Todo /> :
-        <Landing />}
+        <Landing 
+          loggedIn={this.state.loggedIn}
+          changeLogin={this.changeLogin}
+        />}
       </div>
     )
   }
