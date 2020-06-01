@@ -5,6 +5,11 @@ import Button from 'react-bootstrap/Button';
 import './SignUp.css';
 
 class SignUp extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         return (
             <Form className="signUpForm" noValidate style={{width: "95%"}}>

@@ -9,5 +9,14 @@
 }
 
 .sign h2 {
-    padding: 1rem;
+    padding-left: 1rem;
+}
+
+.sign p {
+    padding-left: 1rem;
+    cursor: pointer;
+}
+
+.sign p:hover {
+    color: #007bff;
 }
