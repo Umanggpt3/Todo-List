@@ -1,4 +1,6 @@
 import datetime
+import time
+from django.utils import timezone
 #serializers and models
 from .models import TodoItem
 from .serializers import TodoItemSerializer,UserSerializer
@@ -29,6 +31,8 @@ from rest_framework.authtoken.models import Token
 #######################################################################
 # User related operations
 #######################################################################
+
+# User Login
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes((AllowAny,))
@@ -43,6 +47,7 @@ def handle_user_login(request):
     token,x=Token.objects.get_or_create(user=u)
     return Response({'auth_token':token.key},status=HTTP_200_OK) 
 
+# User Signup
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes((AllowAny,))
@@ -61,12 +66,13 @@ def handle_user_signup(request):
     user_obj.save()
     return Response({'status':'user registration successful'},status=HTTP_200_OK)
 
-
+# User Info
 @api_view(['POST'])
 def get_user_info(request):
     dat=UserSerializer(request.user).data
     return Response(data=dat,content_type='application/json')
 
+# User Logout
 @api_view(['POST'])
 def user_logout(request):
     request.user.auth_token.delete()
@@ -76,18 +82,19 @@ def user_logout(request):
 #######################################################################
 # Item related operations
 #######################################################################
+
+#add item
 @api_view(['POST'])
 def create_item(request):
     cur_usr=request.user
-    due_date_time_str=request.data.get('due_date_time')
-    dt_format="%d-%m-%Y %H:%M:%S"
-    due_date_time=datetime.datetime.strptime(due_date_time_str,dt_format)
-    TodoItem.objects.create(item_title=request.data.get('item_title'),item_description=request.data.get('item_description'),completed=False,due_date_time=due_date_time,user=cur_usr)
+    due_date_time=datetime.datetime.strptime(request.data.get("date")+" "+request.data.get("time"),"%Y-%m-%d %H:%M")
+    TodoItem.objects.create(item_label=request.data.get('label'),item_description=request.data.get('description'),item_status=request.data.get('status'),due_date_time=due_date_time,user=cur_usr)
     return Response()
 
+#get particular item
 @api_view(['GET','POST'])
 def get_item(request):
-    item_id=request.data.get('item_id')
+    item_id=request.data.get('id')
     try:
         it=TodoItem.objects.get(id=item_id)
         if it.user!=request.user:
@@ -96,39 +103,36 @@ def get_item(request):
     except Exception as e:
         return Response({'error':e.__str__},status=HTTP_400_BAD_REQUEST)
 
+#get all items
 @api_view(['GET','POST'])
 def get_all(request):
     cur_usr=request.user
     obj_set=TodoItem.objects.filter(user=cur_usr)
-    obj_list=[]
-    for o in obj_set:
-        obj_list.append(TodoItemSerializer(o).data)
-    return Response(obj_list,status=HTTP_200_OK)
+    return Response(TodoItemSerializer(obj_set,many=True).data,status=HTTP_200_OK)
 
+#update particular item
 @api_view(['POST'])
 def update_item(request):
-    item_id=request.data.get('item_id')
+    item_id=request.data.get('id')
     try:
         it=TodoItem.objects.get(id=item_id)
         if it.user!=request.user:
             return Response({"error":"invalid user!"})
-        it.item_title=request.data.get('item_title')
-        it.item_description=request.data.get('item_description')
-        due_date_time_str=request.data.get('due_date_time')
-        dt_format="%d-%m-%Y %H:%M:%S"
-        due_date_time=datetime.datetime.strptime(due_date_time_str,dt_format)
-        it.due_date_time=due_date_time
+        it.item_label=request.data.get('label')
+        it.item_description=request.data.get('description')
+        it.due_date_time=datetime.datetime.strptime(request.data.get("date")+" "+request.data.get("time"),"%Y-%m-%d %H:%M")
+        it.item_status=request.data.get('status')
         it.save()
         return Response({'status':'success'},status=HTTP_200_OK)
     except Exception as e:
         return Response({'error':e.__str__},status=HTTP_400_BAD_REQUEST)
 
+#delete item
 @api_view(['POST'])
 def delete_item(request):
-    del_id=request.data.get('item_id')
-    d=(TodoItem.objects.filter(id=del_id))
-    for it in d:
-        if it.user!=request.user:
-            return Response({"error":"invalid user!"})
-    d.delete()
-    return Response(status=HTTP_200_OK)
+    del_id=request.data.get('id')
+    try:
+        TodoItem.objects.get(id=del_id).delete()
+        return Response(status=HTTP_200_OK)
+    except Exception as e:
+        return Response({"error":e.__str__},status=HTTP_400_BAD_REQUEST)
