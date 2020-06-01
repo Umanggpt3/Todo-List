@@ -96,20 +96,30 @@ class Addtask extends React.Component {
 
     render() {
 
+        const dark = {
+            background: "#333",
+            color: "white"
+        }
+    
+        const light = {
+            color: "#555",
+            background: "white"
+        }
+
         return (
-            <div>
+            <div style={this.props.isDark === true ? dark : light}>
                 <Modal
                     {...this.props}
                     size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered
                 >
-                <Modal.Header closeButton>
+                <Modal.Header style={this.props.isDark === true ? dark : light} closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
                         <h2 className="py-1" style={{fontWeight: 600}}>Add Task</h2>
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body style={this.props.isDark === true ? dark : light}>
                     <Form 
                         noValidate 
                         validated={this.state.validated} 
@@ -125,6 +135,7 @@ class Addtask extends React.Component {
                                 placeholder="Enter The Task"
                                 value={this.state.item.description} 
                                 onChange={this.handleInputChange}
+                                style={this.props.isDark === true ? dark : null}
                             />
                             <Form.Control.Feedback type="invalid">
                                 Please enter the task details.
@@ -146,6 +157,7 @@ class Addtask extends React.Component {
                                     aria-describedby="inputGroupPrepend"
                                     value={this.state.item.date}
                                     onChange={this.handleInputChange}
+                                    style={this.props.isDark === true ? dark : null}
                                     required
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -167,6 +179,7 @@ class Addtask extends React.Component {
                                     aria-describedby="inputGroupPrepend"
                                     value={this.state.item.time}
                                     onChange={this.handleInputChange}
+                                    style={this.props.isDark === true ? dark : null}
                                     required
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -184,6 +197,7 @@ class Addtask extends React.Component {
                                 placeholder="Enter Label" 
                                 value={this.state.item.label}
                                 onChange={this.handleInputChange}
+                                style={this.props.isDark === true ? dark : null}
                                 required 
                             />
                             <Form.Control.Feedback type="invalid">
@@ -196,10 +210,10 @@ class Addtask extends React.Component {
                         </Form.Row>
                         <Form.Row>
                             <Form.Group className="offset-md-3 col-md-2 mb-3">
-                                <button className="btn btn-outline-primary btn-lg" type="submit" id="add-btn">Add</button>
+                                <button className="btn btn-primary btn-lg" type="submit" id="add-btn">Add</button>
                             </Form.Group>
                             <Form.Group className="offset-md-2 col-md-2 mb-3">
-                                <button className="btn btn-outline-danger btn-lg" type="reset" id="reset-btn">Reset</button>
+                                <button className="btn btn-danger btn-lg" type="reset" id="reset-btn">Reset</button>
                             </Form.Group>
                         </Form.Row>
                     </Form>

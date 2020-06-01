@@ -11,8 +11,22 @@ class SignUp extends Component {
     }
 
     render() {
+
+        const dark = {
+            background: "#333",
+            color: "white"
+        }
+
+        const light = {
+            color: "#555",
+            background: "rgba(0,0,0,0.05)"
+        }
+
         return (
-            <Form className="signUpForm" noValidate style={{width: "95%"}}>
+            <Form 
+                className="signUpForm" 
+                noValidate style={{width: "95%"}}
+                style={this.props.isDark === true ? dark : light}>
                 <h3>Sign Up</h3>
                 <Form.Row>
                     <Form.Group as={Col} md={6} controlId="validationfName">
@@ -22,6 +36,7 @@ class SignUp extends Component {
                         type="text"
                         name="fname"
                         placeholder="Enter first name"
+                        style={this.props.isDark === true ? dark : null}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     </Form.Group>
@@ -32,6 +47,7 @@ class SignUp extends Component {
                         type="text"
                         name="lname"
                         placeholder="Enter last name"
+                        style={this.props.isDark === true ? dark : null}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     </Form.Group>
@@ -44,6 +60,7 @@ class SignUp extends Component {
                         type="text"
                         name="uname"
                         placeholder="Enter username"
+                        style={this.props.isDark === true ? dark : null}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     </Form.Group>
@@ -54,6 +71,7 @@ class SignUp extends Component {
                         type="text"
                         name="email"
                         placeholder="Enter email"
+                        style={this.props.isDark === true ? dark : null}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     </Form.Group>
@@ -66,6 +84,7 @@ class SignUp extends Component {
                         type="password"
                         name="pass"
                         placeholder="Enter password"
+                        style={this.props.isDark === true ? dark : null}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     </Form.Group>
@@ -76,6 +95,7 @@ class SignUp extends Component {
                         type="password"
                         name="cpass"
                         placeholder="Enter password again"
+                        style={this.props.isDark === true ? dark : null}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     </Form.Group>

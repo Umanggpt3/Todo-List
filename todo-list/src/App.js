@@ -1,40 +1,22 @@
 import React, { Component } from 'react';
 import Todo from './Components/Todo/Todo';
 import Landing from './Components/Landing/Landing';
+import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 class App extends Component {
 
   state = {
-    loggedIn: false
+    loggedIn: false,
+    checked: false
   }
 
-  // componentDidMount() {
-  //   let xhr = new XMLHttpRequest();
-  //   let xhr1 = new XMLHttpRequest();
-  //   let userInfo = JSON.stringify({
-  //     "username":"CaptainClaw",
-  //     "password":"password"
-  //   });
-
-  //   xhr.addEventListener('load', () => {
-  //     console.log(xhr.responseText)
-  //   });
-
-  //   xhr1.addEventListener('load', () => {
-  //     console.log(xhr1.responseText)
-  //   });
-    
-  //   xhr.open('POST', 'http://127.0.0.1:8000/user/login/');
-  //   xhr1.open('POST', 'http://127.0.0.1:8000/item/get_all');
-
-  //   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  //   xhr1.setRequestHeader("Authorization","Token 1b825501c7578d19c45d89704e733607fe4e200d");
-
-  //   xhr.send(userInfo);
-  //   xhr1.send();
-  // }
+  toggleEnabled = () => {
+    this.setState({
+      checked: !this.state.checked
+    });
+  }
 
   changeLogin = () => {
     this.setState({
@@ -43,14 +25,45 @@ class App extends Component {
   }
 
   render() {
+    
+    const dark = {
+      background: "#222",
+      color: "white"
+    }
+
+    const light = {
+      color: "#555",
+      background: "white"
+    }
+
+    const toggle = {
+      position: "absolute",
+      top: "100",
+      right: "0",
+      padding: "20px",
+      color: "white"
+    };
+
     return (
-      <div className={this.state.loggedIn === true ? "" : "App"}>
+      <div className={this.state.loggedIn === true ? "" : "app"} style={this.state.checked === true ? dark : light}>
         {this.state.loggedIn === true ?
-        <Todo /> :
+        <Todo 
+          isDark={this.state.checked}
+        /> :
         <Landing 
           loggedIn={this.state.loggedIn}
           changeLogin={this.changeLogin}
+          isDark={this.state.checked}
         />}
+        <Form style={toggle}>
+          <Form.Check 
+            type="switch"
+            id="custom-switch"
+            checked={this.state.checked}
+            onChange={this.toggleEnabled}
+            label={this.state.checked === true ? "Dark" : "Light"}
+          />
+        </Form>
       </div>
     )
   }

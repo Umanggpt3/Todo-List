@@ -37,10 +37,21 @@ class Archive extends React.Component {
     }
 
     render() {
+
+        const dark = {
+            background: "#333",
+            color: "white"
+        }
+    
+        const light = {
+            color: "#555",
+            background: "white"
+        }
+
         return (
-            <Accordion defaultActiveKey="">
-                <Card>
-                    <Card.Header>
+            <Accordion style={this.props.isDark === true ? dark : light} defaultActiveKey="">
+                <Card style={this.props.isDark === true ? dark : light}>
+                    <Card.Header style={this.props.isDark === true ? dark : light}>
                         <Row>
                             <h2 as={Col}>Archive</h2>
                             <div as={Col} className="ml-auto" onClick={() => this.accordionChange(!this.state.isOpen)}>
@@ -54,7 +65,7 @@ class Archive extends React.Component {
                         <Card.Body>
                             <div className={this.props.doneItems.length !== 0 ? "mr-bottom" : ""}>
                                 {this.props.doneItems.length !== 0 ?
-                                <table className="table table-borderless table-responsive">
+                                <table style={this.props.isDark === true ? dark : light} className="table table-borderless table-responsive">
                                 <thead className="thead-light">
                                     <tr className="head">
                                     <th scope="col"></th>

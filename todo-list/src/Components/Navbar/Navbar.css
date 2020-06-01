@@ -3,6 +3,15 @@
     color: white;
 }
 
+.navbar-text {
+    color: unset !important;
+}
+
+input[type=date] {
+    border-top-right-radius: 0.3rem !important;
+    border-bottom-right-radius: 0.3rem !important;
+}
+
 .fixedTop-2 {
     padding-top: 3vh !important;
     width: 85vw;

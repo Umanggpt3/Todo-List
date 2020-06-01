@@ -36,9 +36,36 @@ class Landing extends React.Component {
         }
     }
 
+    componentDidMount() {
+        if(this.props.isDark === true) {
+            document.body.style.backgroundColor = "#222";
+        } else {
+            document.body.style.backgroundColor = "#fff";
+        }
+    }
+    
+    componentDidUpdate() {
+        if(this.props.isDark === true) {
+            document.body.style.backgroundColor = "#222";
+        } else {
+            document.body.style.backgroundColor = "#fff";
+        }
+    }
+
     render() {
+
+        const dark = {
+            background: "#222",
+            color: "white"
+        }
+
+        const light = {
+            color: "#555",
+            background: "white"
+        }
+
         return (
-            <Container className="landing" fluid>
+            <Container className="landing" style={this.props.isDark === true ? dark : light} fluid>
                 <Row>
                     <Col md={7} className="image my-auto">
                         <h1 className="text-center">Declutter Your Schedule</h1>
@@ -52,9 +79,11 @@ class Landing extends React.Component {
                             <Login 
                                 loggedIn={this.props.loggedIn}
                                 aFunctionCall={this.aFunctionCall}
+                                isDark={this.props.isDark}
                             /> :
                             <SignUp 
                                 loggedIn={this.props.loggedIn}
+                                isDark={this.props.isDark}
                             />}
                         
                     </Col>

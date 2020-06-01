@@ -13,14 +13,17 @@
 }
 
 .modal-content {
-    border-radius: 1rem;
+    border-radius: 2rem !important;
 }
 
 .modal-header {
     border-top-left-radius: 1rem !important;
     border-top-right-radius: 1rem !important;
-    background-color: #e9ecef;
-    color: #555555;
+}
+
+.modal-body {
+    border-bottom-left-radius: 1rem !important;
+    border-bottom-right-radius: 1rem !important;
 }
 
 .close {

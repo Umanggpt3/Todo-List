@@ -80,6 +80,13 @@ class Todo extends Component {
     this.sortTasks('date');
   }
 
+  componentDidUpdate() {
+    let htmlTags = document.getElementsByTagName("html");
+    for(var i=0; i < htmlTags.length; i++) {
+      htmlTags[i].style.background = this.props.isDark === true ? "#111" : "#007bff";
+    }
+  }
+
   toggleAddTask = () => {
     this.setState({ show: !this.state.show });
   }
@@ -252,19 +259,42 @@ class Todo extends Component {
   }
 
   render() {
+
+    const dark = {
+      background: "#333",
+      color: "white"
+    }
+
+    const light = {
+      color: "#555",
+      background: "white"
+    }
+
+    const bgDark = {
+      background: "#111",
+      color: "white"
+    }
+
+    const bgLight = {
+      background: "#007bff",
+      color: "#555"
+    }
+
     return (
-      <div className="belowBody">
+      <div className="belowBody" style={this.props.isDark === true ? bgDark : bgLight}>
         <NavbarAbove 
           toggleModal={this.toggleAddTask}
-          searchFunction={this.searchFunction}/>
+          searchFunction={this.searchFunction}
+          isDark={this.props.isDark}/>
         <AddTask 
           show={this.state.show}
           onHide={this.toggleAddTask}
           submit={this.handleSubmit}
-          addnewtask={this.addNewTask}/>
-        <div className={this.state.todoItems.length !== 0 ? "todo-table mr-bottom" : "todo-table"}>
+          addnewtask={this.addNewTask}
+          isDark={this.props.isDark}/>
+        <div style={this.props.isDark === true ? dark : light} className={this.state.todoItems.length !== 0 ? "todo-table mr-bottom" : "todo-table"}>
             {this.state.todoItems.length !== 0 ?
-              <table className="table table-borderless table-responsive">
+              <table style={this.props.isDark === true ? dark : light} className="table table-borderless table-responsive">
               <thead className="thead-light">
                 <tr className="head">
                   <th scope="col"></th>
@@ -317,7 +347,8 @@ class Todo extends Component {
               }
         </div>
         <Archive 
-          doneItems={this.state.completedTodo}/>
+          doneItems={this.state.completedTodo}
+          isDark={this.props.isDark}/>
       </div>
     )
   }

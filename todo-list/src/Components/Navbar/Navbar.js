@@ -5,6 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import InputGroup from 'react-bootstrap/InputGroup';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch , faRedoAlt } from '@fortawesome/free-solid-svg-icons';
 import './Navbar.css';
@@ -80,15 +81,56 @@ class NavbarAbove extends React.Component {
     }
 
     render() {
+
+        const bgDark = {
+            background: "#111",
+            color: "white"
+        }
+
+        const dark = {
+            background: "#333",
+            color: "white"
+        }
+    
+        const bgLight = {
+            background: "#007bff",
+            color: "#555"
+        }
+
+        const navButtonDark = {
+            color: "white",
+            background: "#555",
+            marginTop: "-8px",
+            marginBottom: "-8px",
+            paddingTop: "8px",
+            paddingBottom: "8px",
+        };
+
+        const navButtonLight = {
+            color: "#555",
+            background: "white",
+            marginTop: "-8px",
+            marginBottom: "-8px",
+            paddingTop: "8px",
+            paddingBottom: "8px",
+        };
+
+        const abs = {
+            top: "1vh",
+            right: "1vw"
+        }
+        
         return (
-            <div style={{background: "#007bff"}}>
-                <Navbar collapseOnSelect expand="sm" bg="primary" variant="dark" fixed="top" className="fixedTop-1">
+            <div style={this.props.isDark === true ? bgDark : bgLight}>
+                <Navbar collapseOnSelect expand="xs" style={this.props.isDark === true ? bgDark : bgLight} variant="dark" fixed="top" className="fixedTop-1">
                     <Navbar.Brand href="#home">Todo List</Navbar.Brand>
                     <Nav className="justify-content-end ml-auto">
-                        <Navbar.Text className="px-3">Welcome Umang</Navbar.Text>
+                        <NavDropdown style={abs} className="position-absolute" title="Welcome Umang" id="basic-nav-dropdown">
+                            <NavDropdown.Item style={this.props.isDark === true ? navButtonDark : navButtonLight} href="#action/3.1">Logout</NavDropdown.Item>
+                        </NavDropdown>
                     </Nav>
                 </Navbar>
-                <Navbar collapseOnSelect bg="light" variant="light" className="fixedTop-2 mx-auto">
+                <Navbar collapseOnSelect bg={this.props.isDark === true ? "dark" : "light"} variant="dark" className="fixedTop-2 mx-auto">
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="nav-2 mx-auto">
@@ -100,7 +142,7 @@ class NavbarAbove extends React.Component {
                                 className="row"
                             >
                                 <Form.Group as={Col} lg="2" controlId="validationDate">
-                                    <Button className="addtask-btn btn-block" variant="dark" onClick={this.props.toggleModal}>+ Add Task</Button>
+                                    <Button className="addtask-btn btn-block" variant="warning" onClick={this.props.toggleModal}>+ Add Task</Button>
                                 </Form.Group>
                                 <Form.Group as={Col} lg="4" controlId="validationFromDate">
                                 <InputGroup>
@@ -113,6 +155,7 @@ class NavbarAbove extends React.Component {
                                         value={this.state.fromDate}
                                         onChange={this.handleInputChange}
                                         aria-describedby="inputGroupPrepend1"
+                                        style={this.props.isDark === true ? dark : null}
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
@@ -134,6 +177,7 @@ class NavbarAbove extends React.Component {
                                         value={this.state.toDate}
                                         onChange={this.handleInputChange}
                                         aria-describedby="inputGroupPrepend2"
+                                        style={this.props.isDark === true ? dark : null}
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">

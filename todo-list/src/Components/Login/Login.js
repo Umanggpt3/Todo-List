@@ -31,8 +31,23 @@ class Login extends Component {
             event.stopPropagation();
             this.setValidated(true);
         } else {
-            if(this.state.user.username === "abc" && this.state.user.password === "123" && this.props.loggedIn !== true) {
+            if(this.props.loggedIn !== true) {
+
                 this.props.aFunctionCall();
+
+                // let xhr = new XMLHttpRequest();
+                // let userInfo = JSON.stringify({
+                //     "username":"CaptainClaw",
+                //     "password":"password"
+                //    });
+
+                // xhr.addEventListener('load', () => {
+                //     console.log(xhr.responseText);
+                // });
+                
+                // xhr.open('POST', 'http://127.0.0.1:8000/user/login/');
+                // xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                // xhr.send(userInfo);
             }
             this.setValidated(false);
         }
@@ -51,12 +66,24 @@ class Login extends Component {
     }
 
     render() {
+
+        const dark = {
+            background: "#333",
+            color: "white"
+        }
+
+        const light = {
+            color: "#555",
+            background: "rgba(0,0,0,0.05)"
+        }
+
         return (
             <Form 
                 className="loginForm" 
                 noValidate
                 validated={this.state.validated}
-                onSubmit={this.handleSubmit} >
+                onSubmit={this.handleSubmit} 
+                style={this.props.isDark === true ? dark : light}>
                 <h3>Sign In</h3>
                 <Form.Row>
                     <Form.Group as={Col} md={12} controlId="validationUserName">
@@ -68,6 +95,7 @@ class Login extends Component {
                         value={this.state.user.username}
                         onChange={this.handleInputChange}
                         placeholder="Enter username"
+                        style={this.props.isDark === true ? dark : null}
                     />
                     </Form.Group>
                 </Form.Row>
@@ -81,6 +109,7 @@ class Login extends Component {
                         value={this.state.user.password}
                         onChange={this.handleInputChange}
                         placeholder="Enter password"
+                        style={this.props.isDark === true ? dark : null}
                     />
                     </Form.Group>
                 </Form.Row>
