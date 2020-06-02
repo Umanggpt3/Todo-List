@@ -36,6 +36,10 @@ class Archive extends React.Component {
         });
     }
 
+    removeItem = (data) => {
+        this.props.removeItem(data);
+    }
+
     render() {
 
         const dark = {
@@ -82,6 +86,7 @@ class Archive extends React.Component {
                                     <th scope="col">
                                         Time
                                     </th>
+                                    <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -95,6 +100,7 @@ class Archive extends React.Component {
                                         date={item.date}
                                         time={item.time}
                                         comp={"Archive"}
+                                        removeItem={this.removeItem}
                                     />
                                     )
                                 })}

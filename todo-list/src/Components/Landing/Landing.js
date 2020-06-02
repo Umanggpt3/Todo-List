@@ -35,17 +35,17 @@ class Landing extends React.Component {
             });
         }
     }
-    
+
     render() {
 
         const dark = {
-            background: "#222",
+            background: "#111",
             color: "white"
         }
 
         const light = {
             color: "#555",
-            background: "white"
+            background: "#fff"
         }
 
         return (
@@ -69,6 +69,9 @@ class Landing extends React.Component {
                             <SignUp 
                                 loggedIn={this.props.loggedIn}
                                 isDark={this.props.isDark}
+                                aFunctionCall={this.aFunctionCall}
+                                authToken={this.props.authToken}
+                                changeToLogin={this.changeText}
                             />}
                         
                     </Col>

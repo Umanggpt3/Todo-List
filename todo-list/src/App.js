@@ -9,8 +9,27 @@ class App extends Component {
 
   state = {
     loggedIn: false,
-    checked: false,
-    authToken: ""
+    checked: true,
+    authToken: localStorage.getItem('AuthToken') || "",
+    darkMode: localStorage.getItem('DarkMode') || ""
+  }
+
+  UNSAFE_componentWillMount() {
+    if(this.state.authToken !== "") {
+      this.setState({
+        loggedIn: !this.state.loggedIn
+      });
+    }
+
+    if(this.state.darkMode === "Dark") {
+      this.setState({
+        checked: true
+      });
+    } else {
+      this.setState({
+        checked: false
+      });
+    }
   }
 
   componentDidMount() {
@@ -18,6 +37,10 @@ class App extends Component {
         document.body.style.backgroundColor = "#222";
     } else {
         document.body.style.backgroundColor = "#fff";
+    }
+    let htmlTags = document.getElementsByTagName("html");
+    for(var i=0; i < htmlTags.length; i++) {
+      htmlTags[i].style.background = this.state.checked === true ? "#111" : "#007bff";
     }
   }
 
@@ -27,35 +50,59 @@ class App extends Component {
     } else {
         document.body.style.backgroundColor = "#fff";
     }
+    let htmlTags = document.getElementsByTagName("html");
+    for(var i=0; i < htmlTags.length; i++) {
+      htmlTags[i].style.background = this.state.checked === true ? "#111" : "#007bff";
+    }
   }
 
 
-  toggleEnabled = () => {
+  toggleEnabled = (event) => {
     this.setState({
-      checked: !this.state.checked
+      checked: event.target.checked
+    }, () => {
+      if(this.state.checked === true) {
+        localStorage.setItem("DarkMode", "Dark");
+      } else {
+        localStorage.setItem("DarkMode", "Light");
+      }
     });
   }
 
   changeLogin = (data) => {
     this.setState({
       loggedIn: data === null ? false : true,
-      authToken: data["auth_token"]
+      authToken: data === null ? "" : data["auth_token"]
+    }, () => {
+      if(data === null) {
+        localStorage.removeItem("AuthToken");
+      } else {
+        localStorage.setItem("AuthToken", this.state.authToken);
+      }
     });
   }
 
   render() {
     
     const dark = {
-      background: "#222",
+      background: "#111",
       color: "white"
     }
 
     const light = {
-      color: "#555",
-      background: "white"
+      color: "#fff",
+      background: "#007bff"
     }
 
-    const toggle = {
+    const darktoggle = {
+      position: "absolute",
+      top: "100",
+      right: "0",
+      padding: "20px",
+      color: "white"
+    };
+
+    const lighttoggle = {
       position: "absolute",
       top: "100",
       right: "0",
@@ -77,7 +124,7 @@ class App extends Component {
           isDark={this.state.checked}
           authToken={this.state.authToken}
         />}
-        <Form style={toggle}>
+        <Form style={this.state.checked === true ? darktoggle : lighttoggle}>
           <Form.Check 
             type="switch"
             id="custom-switch"

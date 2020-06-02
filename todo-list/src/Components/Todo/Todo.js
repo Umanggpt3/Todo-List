@@ -20,13 +20,19 @@ class Todo extends Component {
     sortType: {
       status: '',
       label: '',
-      date: 'asc',
+      date: 'desc',
       time: ''
     },
-    currentSort: "date"
+    currentSort: "date",
+    username: ""
   };
 
   UNSAFE_componentWillMount() {
+    console.log("In Component Will Mount");
+    this.updateData();
+  }
+
+  updateData = () => {
     let todoData = [];
     let completed = [];
 
@@ -63,7 +69,18 @@ class Todo extends Component {
           originalData: OGdata
         }, () => {
           this.state.originalData.forEach(item => {
+            let nowDate = Date.now();
+            let dueDate = new Date(item.date + " " + item.time);
+            let daysDiff = (dueDate.getTime() - nowDate) / (1000 * 3600 * 24);
+
             if(item.status !== 'Completed') {
+              if(daysDiff < 0) {
+                item.status = "Overdue";
+              } else if(daysDiff <= 2) {
+                item.status = "Pending";
+              } else {
+                item.status = "Ongoing";
+              }
               todoData.push(item);  
             } else {
               completed.push(item);
@@ -73,6 +90,10 @@ class Todo extends Component {
           this.setState({
               todoItems: todoData,
               completedTodo: completed
+          }, () => {
+            console.log(this.state.originalData);
+            console.log(this.state.todoItems);
+            console.log(this.state.completedTodo);
           });
         });
     });
@@ -80,13 +101,28 @@ class Todo extends Component {
 
   componentDidMount() {
     this.sortTasks('date');
+
+    this.fetchUsername();
   }
 
-  componentDidUpdate() {
-    let htmlTags = document.getElementsByTagName("html");
-    for(var i=0; i < htmlTags.length; i++) {
-      htmlTags[i].style.background = this.props.isDark === true ? "#111" : "#007bff";
-    }
+  fetchUsername = () => {
+    let token = ("Token " + this.props.authToken).toString();
+        
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            "Content-Type": "application/json",
+            "Authorization": token,
+        }
+    };
+
+    fetch('http://127.0.0.1:8000/user/getinfo/', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+        this.setState({
+          username: data["first_name"]
+        });
+    });
   }
 
   toggleAddTask = () => {
@@ -94,46 +130,21 @@ class Todo extends Component {
   }
 
   addNewTask = (newitem) => {
-    let newitems = [
-      ...this.state.todoItems
-    ];
+    this.updateData();
+    this.forceUpdate();
 
-    let newOGData = [
-      ...this.state.originalData
-    ]
+    let newSortType = this.state.sortType;
 
-    newitem.id = (this.state.originalData.length + 1).toString();
-
-    let nowDate = Date.now();
-    let dueDate = new Date(newitem.date);
-
-    let daysDiff = (dueDate.getTime() - nowDate) / (1000 * 3600 * 24);
-
-    if (daysDiff <= 2) {
-      newitem.status = "Pending";
-    }
-
-    newitems.push(newitem);
-    newOGData.push(newitem);
+    if (newSortType[this.state.currentSort] === 'asc') {
+      newSortType[this.state.currentSort] = 'desc';
+    } else if (newSortType[this.state.currentSort] === 'desc') {
+      newSortType[this.state.currentSort] = 'asc';
+    } 
 
     this.setState({
-      show: this.state.show,
-      todoItems: newitems,
-      originalData: newOGData
+      sortType: newSortType
     }, () => {
-      let newSortType = this.state.sortType;
-
-      if (newSortType[this.state.currentSort] === 'asc') {
-        newSortType[this.state.currentSort] = 'desc';
-      } else if (newSortType[this.state.currentSort] === 'desc') {
-        newSortType[this.state.currentSort] = 'asc';
-      } 
-
-      this.setState({
-        sortType: newSortType
-      }, () => {
-        this.sortTasks(this.state.currentSort);
-      });
+      this.sortTasks(this.state.currentSort);
     });
   }
 
@@ -189,26 +200,47 @@ class Todo extends Component {
   }
 
   completedTask = (desc, date, time) => {
-    let todoData = [];
-    let completed = [
-      ...this.state.completedTodo
-    ];
     this.state.todoItems.forEach(item => {
-      if(desc.localeCompare(item.description) !== 0) {
-        todoData.push(item);
-      } else {
+      if(desc.localeCompare(item.description) === 0) {
         item.status = "Completed";
         item.date = date;
         item.time = time;
-        completed.push(item);
+
+        let updateItem = {
+          "id": item.id,
+          "description": item.description,
+          "status": item.status,
+          "label": item.label,
+          "date": item.date,
+          "time": item.time
+        }
+
+        console.log(updateItem);
+
+        let token = ("Token " + this.props.authToken).toString();
+        
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": token,
+            },
+            body: JSON.stringify(updateItem) 
+        };
+
+        fetch('http://127.0.0.1:8000/item/update', requestOptions)
+        .then(response => response)
+        .then(data => {
+            console.log(data);
+        });
       }
     });
+
     setTimeout(() => {
-      this.setState({
-        todoItems: todoData,
-        completedTodo: completed
-      });
-    }, 500);
+      this.updateData();
+      this.forceUpdate();
+    }, 100);
+    
   }
 
   searchFunction = (fromDate, toDate, val = 1) => {
@@ -264,6 +296,43 @@ class Todo extends Component {
     this.props.changeLogin(data);
   }
 
+  removeItem = (desc) => {
+    this.state.originalData.forEach(item => {
+      if(desc.localeCompare(item.description) === 0) {
+        let removeItem = {
+          "id": item.id,
+          "description": item.description,
+          "status": item.status,
+          "label": item.label,
+          "date": item.date,
+          "time": item.time
+        }
+
+        let token = ("Token " + this.props.authToken).toString();
+        
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": token,
+            },
+            body: JSON.stringify(removeItem) 
+        };
+
+        fetch('http://127.0.0.1:8000/item/delete', requestOptions)
+        .then(response => response)
+        .then(data => {
+            console.log(data);
+        });
+      }
+    });
+
+    setTimeout(() => {
+      this.updateData();
+      this.forceUpdate();
+    }, 100);
+  }
+
   render() {
 
     const dark = {
@@ -294,6 +363,7 @@ class Todo extends Component {
           isDark={this.props.isDark}
           aFunctionCall={this.aFunctionCall}
           authToken={this.props.authToken}
+          uname={this.state.username}
           />
 
         <AddTask 
@@ -335,6 +405,7 @@ class Todo extends Component {
                       {this.getSortIcon("time")}
                     </div>
                   </th>
+                  <th scope="col"></th>
                 </tr>
               </thead>
               <tbody>
@@ -347,7 +418,8 @@ class Todo extends Component {
                     label={item.label}
                     date={item.date}
                     time={item.time}
-                    completedTask={this.completedTask}/>
+                    completedTask={this.completedTask}
+                    removeItem={this.removeItem}/>
                 )
               })}
               </tbody>
@@ -360,6 +432,7 @@ class Todo extends Component {
         </div>
         <Archive 
           doneItems={this.state.completedTodo}
+          removeItem={this.removeItem}
           isDark={this.props.isDark}/>
       </div>
     )

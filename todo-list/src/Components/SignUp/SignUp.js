@@ -10,6 +10,7 @@ class SignUp extends Component {
         super(props);
         this.state = {
             validated: false,
+            checked: false,
             user: {
                 fname: "",
                 lname: "",
@@ -17,6 +18,14 @@ class SignUp extends Component {
                 email: "",
                 password: "",
                 cnfpassword: ""
+            },
+            password: {
+                isValid: false,
+                isInvalid: false
+            },
+            email: {
+                isValid: false,
+                isInvalid: false
             }
         }
     }
@@ -24,6 +33,12 @@ class SignUp extends Component {
     setValidated = (val) => {
         this.setState({
             validated: val
+        })
+    }
+
+    setCheckBox = (event) => {
+        this.setState({
+            checked: event.target.checked
         })
     }
 
@@ -35,7 +50,7 @@ class SignUp extends Component {
             event.stopPropagation();
             this.setValidated(true);
         } else {
-            if(this.props.loggedIn !== true) {
+            if(this.props.loggedIn !== true && this.state.password.isValid === true && this.state.email.isValid === true && this.state.checked === true) {
                 console.log(this.state.user);
                 let signUpData = {
                     "username": this.state.user.username,
@@ -50,12 +65,17 @@ class SignUp extends Component {
                     body: JSON.stringify(signUpData)
                 };
                 fetch('http://127.0.0.1:8000/user/signup/', requestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
+                .then(response => {
+                    if (response.status === 200) {
+                        alert("Registered Successfully, Login with your username and password.");
+                        this.props.changeToLogin();
+                    } else if(response.status === 400) {
+                        alert("Username already taken");
+                    }
                 });
+
+                this.setValidated(false);
             }
-            this.setValidated(false);
         }
     }
 
@@ -65,6 +85,87 @@ class SignUp extends Component {
         let value = target.value;
         const name = target.name;
     
+        if(name === "cnfpassword") {
+            if(newuser.password === value) {
+                this.setState({
+                    password: {
+                        isValid: true,
+                        isInvalid: false
+                    }
+                });
+            } else {
+                this.setState({
+                    password: {
+                        isValid: false,
+                        isInvalid: true
+                    }
+                });
+            }
+
+            if(value === "") {
+                this.setState({
+                    password: {
+                        isValid: false,
+                        isInvalid: false
+                    }
+                })
+            }
+        }
+
+        if(name === "password") {
+            if(newuser.cnfpassword === value) {
+                this.setState({
+                    password: {
+                        isValid: true,
+                        isInvalid: false
+                    }
+                });
+            } else {
+                this.setState({
+                    password: {
+                        isValid: false,
+                        isInvalid: true
+                    }
+                });
+            }
+
+            if(value === "") {
+                this.setState({
+                    password: {
+                        isValid: false,
+                        isInvalid: false
+                    }
+                })
+            }
+        }
+
+        if(name === "email") {
+            if(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
+                this.setState({
+                    email: {
+                        isValid: true,
+                        isInvalid: false
+                    }
+                });
+            } else {
+                this.setState({
+                    email: {
+                        isValid: false,
+                        isInvalid: true
+                    }
+                });
+            }
+
+            if(value === "") {
+                this.setState({
+                    email: {
+                        isValid: false,
+                        isInvalid: false
+                    }
+                })
+            }
+        }
+
         newuser[name] = value;
         this.setState({
             user: newuser
@@ -81,7 +182,7 @@ class SignUp extends Component {
 
         const light = {
             color: "#555",
-            background: "rgba(0,0,0,0.05)",
+            background: "#fff",
             width: "95%"
         }
 
@@ -106,6 +207,7 @@ class SignUp extends Component {
                         style={this.props.isDark === true ? dark : null}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">First name required!</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md={6} controlId="validationlName">
                     <Form.Label>Last Name</Form.Label>
@@ -119,6 +221,7 @@ class SignUp extends Component {
                         style={this.props.isDark === true ? dark : null}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">Last name required!</Form.Control.Feedback>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
@@ -134,6 +237,7 @@ class SignUp extends Component {
                         style={this.props.isDark === true ? dark : null}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">Enter proper username!</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md={6} controlId="validationEmailName">
                     <Form.Label>Email Address</Form.Label>
@@ -143,10 +247,13 @@ class SignUp extends Component {
                         name="email"
                         value={this.state.user.email}
                         onChange={this.handleInputChange}
+                        isValid={this.state.email.isValid}
+                        isInvalid={this.state.email.isInvalid}
                         placeholder="Enter email"
                         style={this.props.isDark === true ? dark : null}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">Enter proper e-mail!</Form.Control.Feedback>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
@@ -162,6 +269,7 @@ class SignUp extends Component {
                         style={this.props.isDark === true ? dark : null}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">Password required!</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md={6} controlId="validationConfirmPassword">
                     <Form.Label>Confirm Password</Form.Label>
@@ -171,14 +279,20 @@ class SignUp extends Component {
                         name="cnfpassword"
                         value={this.state.user.cnfpassword}
                         onChange={this.handleInputChange}
+                        isValid={this.state.password.isValid}
+                        isInvalid={this.state.password.isInvalid}
                         placeholder="Enter password again"
                         style={this.props.isDark === true ? dark : null}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">Passwords don't match!</Form.Control.Feedback>
                     </Form.Group>
                 </Form.Row>
                 <Form.Group>
                     <Form.Check
+                    checked={this.state.checked}
+                    onChange={this.setCheckBox}
+                    isValid={this.state.checked}
                     label="I agree to the terms and conditions."
                     />
                 </Form.Group>

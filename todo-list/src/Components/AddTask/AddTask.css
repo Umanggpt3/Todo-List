@@ -29,3 +29,17 @@
 .close {
     color: #555555 !important;
 }
+
+@media screen and (max-width: 768px) {
+    #add-btn {
+        padding-left: auto !important;
+        padding-right: auto !important;
+        width: 100% !important;
+    }
+    
+    #reset-btn {
+        padding-left: auto !important;
+        padding-right: auto !important;
+        width: 100% !important;
+    }
+}

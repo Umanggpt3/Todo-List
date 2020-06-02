@@ -1,5 +1,7 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import './Task.css';
 
 /*eslint no-extend-native: ["error", { "exceptions": ["Date"] }]*/
@@ -38,8 +40,8 @@ class Task extends React.Component {
         });
         if(event.target.checked) {
             let nowDate = new Date();
-            let nowTime = nowDate.getHours() + ":" + nowDate.getMinutes();
-            this.props.completedTask(this.props.desc, nowDate.yyyymmdd(), nowTime);
+            let nowTime = (nowDate.getHours() + ":" + nowDate.getMinutes()).toString();
+            this.props.completedTask(this.props.desc, nowDate.yyyymmdd().toString(), nowTime);
         }
     }
 
@@ -55,8 +57,7 @@ class Task extends React.Component {
             )
         } else if (val === "Pending") {
             return (
-                (daysDiff < 0) ? <div className="btn btn-dark btn-block btn-sm" >Overdue</div> :
-                (daysDiff <= 2) ? <div className="btn btn-danger btn-block btn-sm" >{val}</div>
+                (daysDiff <= 1) ? <div className="btn btn-danger btn-block btn-sm" >{val}</div>
                 : <div className="btn btn-warning btn-block btn-sm" >{val}</div>
 
             )
@@ -64,7 +65,15 @@ class Task extends React.Component {
             return (
                 <div className="btn btn-success btn-block btn-sm" >{val}</div>
             )
+        } else if (val === "Overdue") {
+            return (
+                <div className="btn btn-secondary btn-block btn-sm" >{val}</div>
+            )
         }
+    }
+
+    removeItem = () => {
+        this.props.removeItem(this.props.desc);
     }
 
     render() {
@@ -123,6 +132,9 @@ class Task extends React.Component {
                     "" : 
                     "strikeThrough"}>
                     <div>{this.props.time}</div>    
+                </td>
+                <td>
+                    <FontAwesomeIcon icon={faTrashAlt} onClick={() => this.removeItem()}></FontAwesomeIcon>
                 </td>
             </tr>
         )

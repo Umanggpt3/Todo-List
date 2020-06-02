@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-class Addtask extends React.Component {
+class AddTask extends React.Component {
 
     constructor(props) {
         super(props);
@@ -14,7 +14,7 @@ class Addtask extends React.Component {
             item: {
                 id: "",
                 description: "",
-                status: "Ongoing",
+                status: "",
                 label: "",
                 date: "",
                 time: ""
@@ -52,9 +52,8 @@ class Addtask extends React.Component {
         .then(response => response)
         .then(data => {
             console.log(data);
+            this.props.addnewtask(this.state.item);
         });
-
-        this.props.addnewtask(this.state.item);
     }
 
     handleSubmit = (event) => {
@@ -64,19 +63,23 @@ class Addtask extends React.Component {
             event.stopPropagation();
             this.setValidated(true);
         } else {
-            this.addNewTask();
-            let newitem = {
-                id: "",
-                description: "",
-                status: "Ongoing",
-                label: "",
-                date: "",
-                time: ""
+
+            let nowDate = Date.now();
+            let dueDate = new Date(this.state.item.date + " " + this.state.item.time);
+            let daysDiff = (dueDate.getTime() - nowDate) / (1000 * 3600 * 24);
+            let val = "Ongoing";
+            
+            if(daysDiff < 0) {
+                val = "Overdue";
+            } else if (daysDiff <=2) {
+                val = "Pending";
             }
-    
+
+            let newItem = this.state.item;
+            newItem.status = val;
             this.setState({
-                item: newitem
-            });
+                item: newItem
+            }, this.addNewTask());
 
             this.setValidated(false);
         }
@@ -86,15 +89,15 @@ class Addtask extends React.Component {
         let newitem = {
             id: "",
             description: "",
-            status: "New",
+            status: "",
             label: "",
             date: "",
             time: ""
-        }
+        };
 
         this.setState({
             item: newitem
-        })
+        });
 
         this.setValidated(false);
     }
@@ -120,7 +123,7 @@ class Addtask extends React.Component {
     
         this.setState({
             item: newitem
-        })
+        });
     }
 
     render() {
@@ -138,7 +141,8 @@ class Addtask extends React.Component {
         return (
             <div style={this.props.isDark === true ? dark : light}>
                 <Modal
-                    {...this.props}
+                    show={this.props.show}
+                    onHide={this.props.onHide}
                     size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered
@@ -253,4 +257,4 @@ class Addtask extends React.Component {
     }
 }
 
-export default Addtask;
+export default AddTask;

@@ -11,6 +11,11 @@ input[type=checkbox]:checked {
     border: none;
 }
 
+svg {
+    position: relative !important;
+    cursor: pointer;
+}
+
 .strikeThrough {
     text-decoration: line-through;
 }

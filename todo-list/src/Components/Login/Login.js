@@ -44,10 +44,21 @@ class Login extends Component {
                 };
 
                 fetch('http://127.0.0.1:8000/user/login/', requestOptions)
-                .then(response => response.json())
+                .then(response => {
+                    if(response.status === 200) {
+                        console.log("Success");
+                        return response.json();
+                    } else if(response.status === 400) {
+                        alert("Wrong Username or Password");
+                    }
+                })
                 .then(data => {
-                    console.log(data);
-                    this.props.aFunctionCall(data);
+                    if(data !== undefined) {
+                        this.props.aFunctionCall(data);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
                 });
             }
             this.setValidated(false);
@@ -75,7 +86,7 @@ class Login extends Component {
 
         const light = {
             color: "#555",
-            background: "rgba(0,0,0,0.05)"
+            background: "#fff"
         }
 
         return (
@@ -98,6 +109,8 @@ class Login extends Component {
                         placeholder="Enter username"
                         style={this.props.isDark === true ? dark : null}
                     />
+                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">Username required!</Form.Control.Feedback>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
@@ -112,13 +125,10 @@ class Login extends Component {
                         placeholder="Enter password"
                         style={this.props.isDark === true ? dark : null}
                     />
+                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">Password required!</Form.Control.Feedback>
                     </Form.Group>
                 </Form.Row>
-                <Form.Group>
-                    <Form.Check
-                    label="Remember me"
-                    />
-                </Form.Group>
                 <Form.Row>
                     <Form.Group as={Col} md={12}>
                         <Button type="submit" variant="primary btn-block">Sign In</Button>

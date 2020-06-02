@@ -1,11 +1,10 @@
 .landing {
-    background-color: white;
     height: auto;
-    color: #555555;
+    padding-bottom: 4vh;
 }
 
 .landing .row {
-    padding-top: 10vh;
+    padding-top: 4vh;
     height: auto;
 }
 
@@ -19,7 +18,7 @@
 }
 
 .sign p:hover {
-    color: #007bff;
+    color: #888;
 }
 
 @media screen and (max-width: 768px) {

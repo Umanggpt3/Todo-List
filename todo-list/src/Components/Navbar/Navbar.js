@@ -92,10 +92,10 @@ class NavbarAbove extends React.Component {
         };
 
         fetch('http://127.0.0.1:8000/user/logout/', requestOptions)
-        .then(response => response)
-        .then(data => {
-            console.log(data);
-            this.props.aFunctionCall(null);
+        .then(response => {
+            if (response.status === 200) {
+                this.props.aFunctionCall(null);
+            }
         });
     }
 
@@ -144,7 +144,7 @@ class NavbarAbove extends React.Component {
                 <Navbar collapseOnSelect expand="xs" style={this.props.isDark === true ? bgDark : bgLight} variant="dark" fixed="top" className="fixedTop-1">
                     <Navbar.Brand href="#home">Todo List</Navbar.Brand>
                     <Nav className="justify-content-end ml-auto">
-                        <NavDropdown style={abs} className="position-absolute" title="Welcome Umang" id="basic-nav-dropdown">
+                        <NavDropdown style={abs} className="position-absolute" title={"Welcome " + this.props.uname} id="basic-nav-dropdown">
                             <NavDropdown.Item onClick={this.logoutCall} style={this.props.isDark === true ? navButtonDark : navButtonLight}>Logout</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
