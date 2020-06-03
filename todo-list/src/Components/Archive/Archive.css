@@ -44,3 +44,13 @@
     background-color: white;
     display: inline-block !important;
 }
+
+.archive .thead-light th:nth-child(7) {
+    border-radius: 0rem 0.75rem 0.75rem 0rem;
+}
+
+@media screen and (max-width: 992px) {
+    .accordion {
+        width: 95vw;
+    }
+}

@@ -11,6 +11,10 @@ input[type=checkbox]:checked {
     border: none;
 }
 
+.form-check-input {
+    margin-top: 0.2rem !important;
+}
+
 svg {
     position: relative !important;
     cursor: pointer;
@@ -22,4 +26,7 @@ svg {
 
 td .btn {
     cursor: default !important;
+}
+
+@media screen and (max-width: 768px) {
 }

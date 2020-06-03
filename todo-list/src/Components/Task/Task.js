@@ -1,7 +1,8 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
+import EditTask from '../EditTask/EditTask';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt , faEdit } from '@fortawesome/free-solid-svg-icons';
 import './Task.css';
 
 /*eslint no-extend-native: ["error", { "exceptions": ["Date"] }]*/
@@ -22,7 +23,16 @@ class Task extends React.Component {
         super(props);
         this.state = {
             checkBoxChecked: false,
-            checkBoxDisabled: false
+            checkBoxDisabled: false,
+            showEdit: false,
+            editItem: {
+                id: this.props.id,
+                description: this.props.desc,
+                status: this.props.status,
+                label: this.props.label,
+                date: this.props.date,
+                time: this.props.time
+            }
         }
     }
 
@@ -41,7 +51,7 @@ class Task extends React.Component {
         if(event.target.checked) {
             let nowDate = new Date();
             let nowTime = (nowDate.getHours() + ":" + nowDate.getMinutes()).toString();
-            this.props.completedTask(this.props.desc, nowDate.yyyymmdd().toString(), nowTime);
+            this.props.completedTask(this.props.id, nowDate.yyyymmdd().toString(), nowTime);
         }
     }
 
@@ -73,11 +83,22 @@ class Task extends React.Component {
     }
 
     removeItem = () => {
-        this.props.removeItem(this.props.desc);
+        this.props.removeItem(this.props.id);
+    }
+
+    toggleEditTask = () => {
+        this.setState({
+            showEdit: !this.state.showEdit
+        });
+    }
+
+    updateData = () => {
+        this.props.updateData();
     }
 
     render() {
         return (
+            <>
             <tr className="active">
                 <th className={this.props.comp === 'Archive' ? "strikeThrough" : (!this.state.checkBoxChecked ? "" : "strikeThrough")} scope="row">
                 <div>
@@ -93,12 +114,26 @@ class Task extends React.Component {
                 </Form>
                 </div>
                 </th>
+                {
+                    this.props.comp !== 'Archive' ? 
+                    <td>
+                        <FontAwesomeIcon icon={faEdit} onClick={() => this.toggleEditTask()}></FontAwesomeIcon>
+                        <EditTask 
+                            show={this.state.showEdit}
+                            onHide={this.toggleEditTask}
+                            isDark={this.props.isDark}
+                            authToken={this.props.authToken}
+                            editTask={this.state.editItem}
+                            updateData={this.updateData}/>
+                    </td> :
+                    null
+                }
                 <td 
                     className={this.props.comp === 'Archive' ? 
                     "strikeThrough" : 
                     !this.state.checkBoxChecked ? 
                     "" : 
-                    "strikeThrough"}>
+                    "strikeThrough"} >
                     <div>{this.props.desc}</div>    
                 </td>
                 <td 
@@ -137,6 +172,7 @@ class Task extends React.Component {
                     <FontAwesomeIcon icon={faTrashAlt} onClick={() => this.removeItem()}></FontAwesomeIcon>
                 </td>
             </tr>
+            </>
         )
     }
 }

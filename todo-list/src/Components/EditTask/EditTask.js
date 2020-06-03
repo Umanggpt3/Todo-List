@@ -1,23 +1,22 @@
 import React from 'react';
-import './AddTask.css';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-class AddTask extends React.Component {
+class EditTask extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             validated: false,
             item: {
-                id: "",
-                description: "",
-                status: "",
-                label: "",
-                date: "",
-                time: ""
+                id: this.props.editTask.id,
+                description: this.props.editTask.description,
+                status: this.props.editTask.status,
+                label: this.props.editTask.label,
+                date: this.props.editTask.date,
+                time: this.props.editTask.time
             }
         }
     }
@@ -28,8 +27,9 @@ class AddTask extends React.Component {
         })
     }
 
-    addNewTask = () => {
-        let sendItem = {
+    editTask = () => {
+        let updateItem = {
+            "id": this.state.item.id,
             "description": this.state.item.description,
             "status": this.state.item.status,
             "label": this.state.item.label,
@@ -45,19 +45,16 @@ class AddTask extends React.Component {
                 "Content-Type": "application/json",
                 "Authorization": token,
             },
-            body: JSON.stringify(sendItem) 
+            body: JSON.stringify(updateItem) 
         };
 
-        fetch('http://127.0.0.1:8000/item/create', requestOptions)
+        fetch('http://127.0.0.1:8000/item/update', requestOptions)
         .then(response => {
             if(response.status === 200){
-                this.props.addnewtask(this.state.item);
+                this.props.updateData();
             } else {
                 alert("There was some problem with that. We're currently working on fixing it. Thank You.");
             }
-        })
-        .then(data => {
-            console.log(data);
         });
     }
 
@@ -84,7 +81,7 @@ class AddTask extends React.Component {
             newItem.status = val;
             this.setState({
                 item: newItem
-            }, this.addNewTask());
+            }, this.editTask());
 
             this.setValidated(false);
         }
@@ -155,7 +152,7 @@ class AddTask extends React.Component {
                 <Modal.Header style={this.props.isDark === true ? dark : light} closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
                         <h2 className="py-1" style={{fontWeight: 600}}>
-                            Add Task
+                            Edit Task
                         </h2>
                     </Modal.Title>
                 </Modal.Header>
@@ -172,7 +169,7 @@ class AddTask extends React.Component {
                                 required
                                 type="text"
                                 name="description"
-                                placeholder="Enter The Task"
+                                placeholder="Enter the Task"
                                 value={this.state.item.description} 
                                 onChange={this.handleInputChange}
                                 style={this.props.isDark === true ? dark : null}
@@ -250,7 +247,7 @@ class AddTask extends React.Component {
                         </Form.Row>
                         <Form.Row>
                             <Form.Group className="offset-md-3 col-md-2 mb-3">
-                                <button className="btn btn-primary btn-lg" type="submit" id="add-btn">Add</button>
+                                <button className="btn btn-primary btn-lg" type="submit" id="add-btn">Edit</button>
                             </Form.Group>
                             <Form.Group className="offset-md-2 col-md-2 mb-3">
                                 <button className="btn btn-danger btn-lg" type="reset" id="reset-btn">Reset</button>
@@ -264,4 +261,4 @@ class AddTask extends React.Component {
     }
 }
 
-export default AddTask;
+export default EditTask;

@@ -13,14 +13,14 @@ import './Todo.css'
 class Todo extends Component {
 
   state = { 
-    show: false,
+    showAdd: false,
     todoItems: [],
     completedTodo: [],
     originalData: [],
     sortType: {
       status: '',
       label: '',
-      date: 'desc',
+      date: 'asc',
       time: ''
     },
     currentSort: "date",
@@ -49,12 +49,13 @@ class Todo extends Component {
     fetch('http://127.0.0.1:8000/item/get_all', requestOptions)
     .then(response => response.json())
     .then(data => {
-        console.log(data);
 
         let OGdata = [];
+        let keyId = 1;
 
         data.forEach(item => {
           let newData = {
+            key: keyId, 
             id: item["id"],
             description: item["description"],
             status: item["status"],
@@ -62,6 +63,7 @@ class Todo extends Component {
             date: item["due_date_time"].slice(0,10),
             time: item["due_date_time"].slice(11,19)
           };
+          keyId++;
           OGdata.push(newData);
         })
         
@@ -91,17 +93,14 @@ class Todo extends Component {
               todoItems: todoData,
               completedTodo: completed
           }, () => {
-            console.log(this.state.originalData);
-            console.log(this.state.todoItems);
-            console.log(this.state.completedTodo);
+            this.sortTasks(this.state.currentSort);
+            this.forceUpdate();
           });
         });
     });
   }
 
   componentDidMount() {
-    this.sortTasks('date');
-
     this.fetchUsername();
   }
 
@@ -126,26 +125,14 @@ class Todo extends Component {
   }
 
   toggleAddTask = () => {
-    this.setState({ show: !this.state.show });
+    this.setState({ 
+      showAdd: !this.state.showAdd
+    });
   }
 
-  addNewTask = (newitem) => {
+  addNewTask = () => {
     this.updateData();
     this.forceUpdate();
-
-    let newSortType = this.state.sortType;
-
-    if (newSortType[this.state.currentSort] === 'asc') {
-      newSortType[this.state.currentSort] = 'desc';
-    } else if (newSortType[this.state.currentSort] === 'desc') {
-      newSortType[this.state.currentSort] = 'asc';
-    } 
-
-    this.setState({
-      sortType: newSortType
-    }, () => {
-      this.sortTasks(this.state.currentSort);
-    });
   }
 
   getSortIcon = (val) => {
@@ -173,23 +160,24 @@ class Todo extends Component {
     };
   }
 
-  sortTasks = (val) => {
+  sortTasks = (val, isTrue = false) => {
     let newTodo =  [
       ...this.state.todoItems
     ];
 
     let newSortType = this.state.sortType;
-
-    let order;
     
-    if (this.state.sortType[val] === 'asc') {
-      order = 'desc';
-    } else {
-      order = 'asc';
+    let order = newSortType[val];
+
+    if(isTrue === true) {
+      if (newSortType[val] === 'asc') {
+        order = 'desc';
+      } else {
+        order = 'asc';
+      }
     }
-
+  
     newTodo.sort(this.compareValues(val, order));
-    
     newSortType[val] = order;
 
     this.setState({
@@ -199,9 +187,9 @@ class Todo extends Component {
     });
   }
 
-  completedTask = (desc, date, time) => {
+  completedTask = (id, date, time) => {
     this.state.todoItems.forEach(item => {
-      if(desc.localeCompare(item.description) === 0) {
+      if(id.toString().localeCompare(item.id.toString()) === 0) {
         item.status = "Completed";
         item.date = date;
         item.time = time;
@@ -229,16 +217,16 @@ class Todo extends Component {
         };
 
         fetch('http://127.0.0.1:8000/item/update', requestOptions)
-        .then(response => response)
-        .then(data => {
-            console.log(data);
+        .then(response => {
+          if(response.status !== 200) {
+              alert("There was some problem with that. We're currently working on fixing it. Thank You.");
+          }
         });
       }
     });
 
     setTimeout(() => {
       this.updateData();
-      this.forceUpdate();
     }, 100);
     
   }
@@ -246,8 +234,9 @@ class Todo extends Component {
   searchFunction = (fromDate, toDate, val = 1) => {
     if(val === 1) {
       let newTodo = [];
+      let completed = [];
 
-      this.state.todoItems.forEach(item => {
+      this.state.originalData.forEach(item => {
         let current = new Date(item.date + " 00:00:00");
         let fDate = new Date(fromDate + " 00:00:00");
         let tDate = new Date(toDate + " 00:00:00");
@@ -256,39 +245,24 @@ class Todo extends Component {
         let tDaysDiff = (current.getTime() - tDate.getTime()) / (1000 * 3600 * 24);
         
         if(fDaysDiff >= 0 && tDaysDiff <= 0) {
-          newTodo.push(item);
+          if(item.status === "Completed") {
+            completed.push(item);
+          } else {
+            newTodo.push(item);
+          }
         }
       });
 
       if(newTodo.length !== 0) {
         this.setState({
-          todoItems: newTodo
+          todoItems: newTodo,
+          completedTodo: completed
         });
       } else {
         alert("No Search Results.");
       }
     } else {
-      let todoData = [];
-      let newSortType = this.state.sortType;
-
-      this.state.originalData.forEach(item => {
-        if(item.status !== 'Completed') {
-          todoData.push(item);  
-        }
-      });
-
-      if (newSortType[this.state.currentSort] === 'asc') {
-        newSortType[this.state.currentSort] = 'desc';
-      } else if (newSortType[this.state.currentSort] === 'desc') {
-        newSortType[this.state.currentSort] = 'asc';
-      } 
-
-      this.setState({
-        todoItems: todoData,
-        sortType: newSortType
-      }, () => {
-        this.sortTasks(this.state.currentSort);
-      });
+      this.updateData();
     }
   }
 
@@ -296,9 +270,9 @@ class Todo extends Component {
     this.props.changeLogin(data);
   }
 
-  removeItem = (desc) => {
+  removeItem = (id) => {
     this.state.originalData.forEach(item => {
-      if(desc.localeCompare(item.description) === 0) {
+      if(id.toString().localeCompare(item.id.toString()) === 0) {
         let removeItem = {
           "id": item.id,
           "description": item.description,
@@ -320,16 +294,16 @@ class Todo extends Component {
         };
 
         fetch('http://127.0.0.1:8000/item/delete', requestOptions)
-        .then(response => response)
-        .then(data => {
-            console.log(data);
+        .then(response => {
+          if(response.status !== 200){
+            alert("There was some problem with that. We're currently working on fixing it. Thank You.");
+          }
         });
       }
     });
 
     setTimeout(() => {
       this.updateData();
-      this.forceUpdate();
     }, 100);
   }
 
@@ -367,9 +341,8 @@ class Todo extends Component {
           />
 
         <AddTask 
-          show={this.state.show}
+          show={this.state.showAdd}
           onHide={this.toggleAddTask}
-          submit={this.handleSubmit}
           addnewtask={this.addNewTask}
           isDark={this.props.isDark}
           authToken={this.props.authToken}/>
@@ -380,26 +353,27 @@ class Todo extends Component {
               <thead className="thead-light">
                 <tr className="head">
                   <th scope="col"></th>
+                  <th scope="col"></th>
                   <th scope="col">Title</th>
-                  <th onClick={() => this.sortTasks("status")} scope="col">
+                  <th onClick={() => this.sortTasks("status", true)} scope="col">
                     Status
                     <div className="sort-icon">
                       {this.getSortIcon("status")}
                     </div>
                   </th>
-                  <th onClick={() => this.sortTasks("label")} scope="col">
+                  <th onClick={() => this.sortTasks("label", true)} scope="col">
                     Label
                     <div className="sort-icon">
                       {this.getSortIcon("label")}
                     </div>
                   </th>
-                  <th onClick={() => this.sortTasks("date")} scope="col">
-                    Due Date
+                  <th onClick={() => this.sortTasks("date", true)} scope="col">
+                    Date
                     <div className="sort-icon">
                       {this.getSortIcon("date")}
                     </div>
                   </th>
-                  <th onClick={() => this.sortTasks("time")} scope="col">
+                  <th onClick={() => this.sortTasks("time", true)} scope="col">
                     Time
                     <div className="sort-icon">
                       {this.getSortIcon("time")}
@@ -412,14 +386,18 @@ class Todo extends Component {
               {this.state.todoItems.map(item => {
                 return (
                     <Task
-                    key={item.id}
+                    key={item.key}
+                    id={item.id}
                     desc={item.description}
                     status={item.status}
                     label={item.label}
                     date={item.date}
                     time={item.time}
+                    isDark={this.props.isDark}
                     completedTask={this.completedTask}
-                    removeItem={this.removeItem}/>
+                    removeItem={this.removeItem}
+                    authToken={this.props.authToken}
+                    updateData={this.updateData}/>
                 )
               })}
               </tbody>

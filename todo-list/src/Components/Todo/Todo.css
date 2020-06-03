@@ -34,7 +34,7 @@ table {
     border-radius: 0.75rem 0rem 0rem 0.75rem;
 }
 
-.table .thead-light th:nth-child(7) {
+.table .thead-light th:nth-child(8) {
     border-radius: 0rem 0.75rem 0.75rem 0rem;
 }
 
@@ -60,6 +60,12 @@ svg {
 @media screen and (max-width: 768px) {
     .table-responsive {
         display: block !important;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .todo-table {
+        width: 95vw;
     }
 }
   

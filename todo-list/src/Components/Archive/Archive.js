@@ -69,7 +69,7 @@ class Archive extends React.Component {
                         <Card.Body>
                             <div className={this.props.doneItems.length !== 0 ? "mr-bottom" : ""}>
                                 {this.props.doneItems.length !== 0 ?
-                                <table style={this.props.isDark === true ? dark : light} className="table table-borderless table-responsive">
+                                <table style={this.props.isDark === true ? dark : light} className="table archive table-borderless table-responsive">
                                 <thead className="thead-light">
                                     <tr className="head">
                                     <th scope="col"></th>
@@ -93,7 +93,8 @@ class Archive extends React.Component {
                                 {this.props.doneItems.map(item => {
                                     return (
                                         <Task
-                                        key={item.id}
+                                        key={item.key}
+                                        id={item.id}
                                         desc={item.description}
                                         status={item.status}
                                         label={item.label}

@@ -12,6 +12,11 @@ input[type=date] {
     border-bottom-right-radius: 0.3rem !important;
 }
 
+input[type=time] {
+    border-top-right-radius: 0.3rem !important;
+    border-bottom-right-radius: 0.3rem !important;
+}
+
 .fixedTop-2 {
     padding-top: 3vh !important;
     width: 85vw;
@@ -53,5 +58,15 @@ input[type=date] {
 
     .nav-2 {
         margin-top: 2vh;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .fixedTop-2 {
+        width: 95vw;
+    }
+
+    .nav-2 {
+        width: 90vw;
     }
 }

@@ -95,8 +95,14 @@ class NavbarAbove extends React.Component {
         .then(response => {
             if (response.status === 200) {
                 this.props.aFunctionCall(null);
+            } else {
+                alert("Sorry for the inconvenience. We're working to solve this issue.")
             }
         });
+    }
+
+    toggleModal = () => {
+        this.props.toggleModal();
     }
 
     render() {
@@ -161,7 +167,7 @@ class NavbarAbove extends React.Component {
                                 className="row"
                             >
                                 <Form.Group as={Col} lg="2" controlId="validationDate">
-                                    <Button className="addtask-btn btn-block" variant="warning" onClick={this.props.toggleModal}>+ Add Task</Button>
+                                    <Button className="addtask-btn btn-block" variant="warning" onClick={() => this.toggleModal()}>+ Add Task</Button>
                                 </Form.Group>
                                 <Form.Group as={Col} lg="4" controlId="validationFromDate">
                                 <InputGroup>
