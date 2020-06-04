@@ -16,7 +16,7 @@ class EditTask extends React.Component {
                 status: this.props.editTask.status,
                 label: this.props.editTask.label,
                 date: this.props.editTask.date,
-                time: this.props.editTask.time
+                time: this.props.editTask.time.slice(0,5)
             }
         }
     }
@@ -65,7 +65,7 @@ class EditTask extends React.Component {
             event.stopPropagation();
             this.setValidated(true);
         } else {
-
+            console.log(this.state.item);
             let nowDate = Date.now();
             let dueDate = new Date(this.state.item.date + " " + this.state.item.time);
             let daysDiff = (dueDate.getTime() - nowDate) / (1000 * 3600 * 24);
@@ -115,6 +115,7 @@ class EditTask extends React.Component {
             value = target.value;
         } else if(target.name === "time") {
             value = target.value;
+            console.log(value);
         } else if(target.name === "label") {
             value = target.value;
         }

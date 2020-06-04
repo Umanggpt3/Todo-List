@@ -356,26 +356,26 @@ class Todo extends Component {
                   <th scope="col"></th>
                   <th scope="col">Title</th>
                   <th onClick={() => this.sortTasks("status", true)} scope="col">
-                    Status
                     <div className="sort-icon">
+                      Status
                       {this.getSortIcon("status")}
                     </div>
                   </th>
                   <th onClick={() => this.sortTasks("label", true)} scope="col">
-                    Label
                     <div className="sort-icon">
+                    Label
                       {this.getSortIcon("label")}
                     </div>
                   </th>
                   <th onClick={() => this.sortTasks("date", true)} scope="col">
-                    Date
                     <div className="sort-icon">
+                    Date
                       {this.getSortIcon("date")}
                     </div>
                   </th>
                   <th onClick={() => this.sortTasks("time", true)} scope="col">
-                    Time
                     <div className="sort-icon">
+                    Time
                       {this.getSortIcon("time")}
                     </div>
                   </th>

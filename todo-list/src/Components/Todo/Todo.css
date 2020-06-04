@@ -22,7 +22,7 @@ table {
     margin: auto;
 }
 
-.table .thead-light th {
+.sort-icon {
     cursor: pointer;
 }
 
