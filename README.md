@@ -1,5 +1,5 @@
 # Todo-List
-Task Management Web App using ReactJS and Django
+## Task Management Web App using ReactJS and Django 
 A simple task management wesite to keep you organised and productive. The web app consists of a frontend using ReactJS framework and a backend using Django Rest Framework.
 In order to run the web app the steps to be followed are:-
 1. Clone the repository or download the zip version.
@@ -15,3 +15,4 @@ In order to run the web app the steps to be followed are:-
 10. The web app now runs at port 3000 on localhost by default and can be accessed by means of a web browser.
 
 The web app is also hosted on <https://todolistreactdjango.herokuapp.com/>.
+<
