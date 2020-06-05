@@ -1,6 +1,6 @@
 # Todo-List
 ## Task Management Web App using ReactJS and Django 
-A simple task management wesite to keep you organised and productive. The web app consists of a frontend using ReactJS framework and a backend using Django Rest Framework.
+A simple task management web application to stay organised and productive. The web app consists of a frontend using ReactJS framework and a backend using Django Rest Framework.
 In order to run the web app the steps to be followed are:-
 1. Clone the repository or download the zip version.
 2. Download and install Python version 3.7.6 or above and NPM version 6.14.5 or above.
