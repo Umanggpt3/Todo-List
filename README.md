@@ -7,7 +7,7 @@ In order to run the web app the steps to be followed are:-
 3. Navigate to the server_logic directory. This directory contains the backend code for the web app.
 3. Run the following command ```$ pip install -r requirements.txt```. This installs all the python modules required for running the backend server.
 4. Start the server on port 8000 with the following command ``` python manage.py runserver 8000 ```.
-5. Once the server is up and running, navigate back to the todo-list directory in the root the repository.
+5. Once the server is up and running, navigate back to the todo-list directory in the root of the repository.
 6. This directory contains the code for the frontend of the web application.
 7. Run the following command ```$ npm install```. This command install the node modules required for running the frontend.
 8. If any errors are encountered while installing the node modules, these can be fixed by use of the commands ```$ npm audit``` and ```$ npm audit fix``` 
