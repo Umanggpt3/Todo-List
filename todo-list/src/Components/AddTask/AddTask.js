@@ -52,6 +52,9 @@ class AddTask extends React.Component {
         .then(response => {
             if(response.status === 200){
                 this.props.addnewtask(this.state.item);
+                this.props.onHide();
+                this.handleReset();
+                alert("Task Added.");
             } else {
                 alert("There was some problem with that. We're currently working on fixing it. Thank You.");
             }

@@ -17,9 +17,6 @@
     cursor: pointer;
 }
 
-.sign p:hover {
-    color: #888;
-}
 
 @media screen and (max-width: 768px) {
     .landing .row {

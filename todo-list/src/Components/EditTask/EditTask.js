@@ -52,6 +52,9 @@ class EditTask extends React.Component {
         .then(response => {
             if(response.status === 200){
                 this.props.updateData();
+                this.props.onHide();
+                this.handleReset();
+                alert("Task Edited.");
             } else {
                 alert("There was some problem with that. We're currently working on fixing it. Thank You.");
             }

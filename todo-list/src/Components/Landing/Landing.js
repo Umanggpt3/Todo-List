@@ -13,8 +13,7 @@ class Landing extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: "login",
-            signInUp: "Join us now. Sign Up."
+            visible: "login"
         };
     }
 
@@ -25,13 +24,11 @@ class Landing extends React.Component {
     changeText = () => {
         if(this.state.visible === "login") {
             this.setState({
-                visible: "signup",
-                signInUp: "Already a member?  Sign In."
+                visible: "signup"
             });
         } else {
             this.setState({
-                visible: "login",
-                signInUp: "Join us now.  Sign Up."
+                visible: "login"
             });
         }
     }
@@ -58,13 +55,13 @@ class Landing extends React.Component {
                     </Col>
                     <Col md={5} className="sign my-auto">
                         <h2>Welcome, Let's Get Started.</h2>
-                        <p onClick={() => this.changeText()}>{this.state.signInUp}</p>
                         {this.state.visible === "login" ?
                             <Login 
                                 loggedIn={this.props.loggedIn}
                                 isDark={this.props.isDark}
                                 aFunctionCall={this.aFunctionCall}
                                 authToken={this.props.authToken}
+                                changeText={this.changeText}
                             /> :
                             <SignUp 
                                 loggedIn={this.props.loggedIn}
@@ -73,7 +70,6 @@ class Landing extends React.Component {
                                 authToken={this.props.authToken}
                                 changeToLogin={this.changeText}
                             />}
-                        
                     </Col>
                 </Row>
             </Container>
