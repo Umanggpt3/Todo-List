@@ -15,4 +15,4 @@ In order to run the web app the steps to be followed are:-
 10. The web app now runs at port 3000 on localhost by default and can be accessed by means of a web browser.
 
 The web app is also hosted on <https://todolistreactdjango.herokuapp.com/>.
-<
+
