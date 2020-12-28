@@ -16,3 +16,4 @@ In order to run the web app the steps to be followed are:-
 
 The web app is also hosted on <https://todolistreactdjango.herokuapp.com/>.
 
+The Project is also featured @ DjangoSites.org. Link is here - <https://www.djangosites.org/s/todolistreactdjango-herokuapp-com/>.
